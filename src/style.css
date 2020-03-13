@@ -1,0 +1,157 @@
+.spreadsheet {
+  color: #212529;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.cell {
+  padding: 2px;
+}
+
+.spreadsheet .row {
+  display: flex;
+}
+
+.spreadsheet .fixed-rows {
+  border-bottom: solid 1px #a9a9a9
+}
+
+.spreadsheet .fixed-columns {
+  border-right: solid 1px #a9a9a9
+}
+
+.spreadsheet .group-button-container {
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spreadsheet .group-button {
+  width: 20px;
+  height: 20px;
+  border: solid 1px #c3c3c3;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.spreadsheet .group-line-root {
+  background-color: #f1f1f1;
+  position: relative;
+}
+
+.spreadsheet .group-line-button {
+  width: 20px;
+  height: 20px;
+  background-color: #f1f1f1;
+  border: solid 1px #c3c3c3;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 1;
+}
+
+.spreadsheet .group-line-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spreadsheet .group-line-vertical-line {
+  position: absolute;
+  left: calc(50% - 1px);
+  border-bottom: solid 2px #a9a9a9;
+  border-left: solid 2px #a9a9a9;
+}
+
+.spreadsheet .group-line-horizontal-line {
+  position: absolute;
+  top: calc(50% - 1px);
+  border-top: solid 2px #a9a9a9;
+  border-right: solid 2px #a9a9a9;
+}
+
+.spreadsheet .heading-cell {
+  padding: 4px 6px;
+  border-bottom: solid 1px #c3c3c3;
+  border-right: solid 1px #c3c3c3;
+  font-size: 12px;
+  background-color: #f1f1f1;
+}
+
+.spreadsheet .heading-intersection {
+  cursor: pointer;
+}
+
+.spreadsheet .heading-selected {
+  background-color: #dadada;
+}
+
+.spreadsheet .heading-row-number {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.spreadsheet .heading-column-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.spreadsheet .heading-resizer {
+  position: absolute;
+  z-index: 1;
+  user-select: none;
+}
+
+.spreadsheet .heading-row-resizer {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.spreadsheet .heading-column-resizer {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+}
+
+.spreadsheet .resize-line-row {
+  border-bottom: solid 1px #528d62
+}
+
+.spreadsheet .resize-line-column {
+  border-right: solid 1px #528d62
+}
+
+.spreadsheet .selected-range {
+  border: solid 2px #008222;
+  cursor: cell;
+}
+
+.spreadsheet .selected-range-multiple {
+  background-color: rgba(220, 220, 220, 0.4);
+  border-color: #9a9a9a;
+}
+
+.spreadsheet .special-cell-empty-area {
+  background-color: #f1f1f1;
+  height: 100%
+}
+
+.spreadsheet .value-cell {
+  background-color: #fff;
+  cursor: cell
+}

@@ -18,7 +18,7 @@
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf lib && mkdir lib && cross-env NODE_ENV=production babel src --out-dir lib --ignore src/**/*.stories.js,src/**/*.test.js && copyfiles -u 1 src/**/*.d.ts lib",
+    "build": "rm -rf lib && mkdir lib && cross-env NODE_ENV=production babel src --out-dir lib --ignore src/**/*.stories.js,src/**/*.test.js && copyfiles -u 1 src/**/*.d.ts lib && copyfiles -u 1 src/**/*.css lib",
     "test": "jest",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "rm -rf docs/storybook && build-storybook -s public -o docs/storybook",
@@ -48,6 +48,8 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-react": "^7.8.3",
     "@storybook/addon-actions": "^5.3.14",
     "@storybook/addon-links": "^5.3.14",
     "@storybook/addons": "^5.3.14",
@@ -55,7 +57,6 @@
     "@storybook/react": "^5.3.14",
     "@types/react": "^16.9.23",
     "babel-jest": "^25.1.0",
-    "babel-preset-react-app": "^9.1.1",
     "copyfiles": "^2.2.0",
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
