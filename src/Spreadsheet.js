@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
 import useSpreadsheet from './useSpreadsheet';
 import Heading from './Heading';
@@ -26,7 +26,14 @@ const Spreadsheet = inputProps => {
   const specialRowsHeight = columnHeadingHeight;
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
 
+  const scrollContainerRef = useRef();
   const columnsHeadingsRef = useRef();
+
+  const [horScrollBarWidth, setHorScrollBarWidth] = useState(0);
+  useEffect(function updateHorScrollBarWidth() {
+    const width = scrollContainerRef.current.offsetWidth - scrollContainerRef.current.clientWidth;
+    setHorScrollBarWidth(width);
+  }, []);
 
   const handleScroll = useCallback(event => {
     columnsHeadingsRef.current.scrollLeft = event.target.scrollLeft;
@@ -41,7 +48,7 @@ const Spreadsheet = inputProps => {
             cellComponentProps={{ mode: 'column' }}
             rowComponentProps={{ className: 'row' }}
             value={columnsHeadingsValue}
-            width="100%"
+            width={`calc(100% - ${horScrollBarWidth}px)`}
             height={columnHeadingHeight}
             onScroll={handleScroll}
             columnsSizes={columnsSizes}
@@ -52,6 +59,7 @@ const Spreadsheet = inputProps => {
             defaultRowHeight={columnHeadingHeight} />
       )}
       <Scroller
+          ref={scrollContainerRef}
           CellComponent={CellComponent}
           rowComponentProps={{ className: 'row' }}
           value={cells}

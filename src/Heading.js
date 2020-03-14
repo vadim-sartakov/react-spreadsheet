@@ -9,7 +9,7 @@ const Heading = ({ value, mode, style }) => {
   }
   return (
     <div className={`heading-cell ${className}`} style={style}>
-      {value.key}
+      {value.key + 1}
     </div>
   );
 };
