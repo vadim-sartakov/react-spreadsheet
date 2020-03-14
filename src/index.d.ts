@@ -100,8 +100,15 @@ export interface UseSpreadsheetResult {
 export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult
 
 export interface SpreadsheetProps extends UseSpreadsheetOptions {
-  /** If set to 'true' than rows/columns headings won't be rendered */
+  width?: number | string;
+  height: number | string;
+  /** If set to 'true' then rows/columns headings won't be rendered */
   hideHeadings?: boolean;
+  /**
+   * If set to 'true' then special 'no-grid' class will be appended to root.
+   * If default style imported, then grid will be hidden.
+   */
+  noGrid?: boolean;
   /** Height of special row with column numbers */
   columnHeadingHeight?: number;
   /** Width of special column with row numbers */

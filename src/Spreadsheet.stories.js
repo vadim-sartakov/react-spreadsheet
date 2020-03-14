@@ -18,7 +18,7 @@ const generateCells = (rowsCount, columnsCount) => {
 const cells = generateCells(1000, 50);
 
 const CellComponent = ({ value: cell, style }) => {
-  return <div className="cell" style={style}>{cell.value}</div>
+  return <div className="cell value-cell" style={style}>{cell.value}</div>
 };
 
 export const defaultComponent = props => {
@@ -29,8 +29,8 @@ export const defaultComponent = props => {
         cells={cells}
         totalRows={cells.length}
         totalColumns={cells[0].length}
-        width={800}
-        height={600}
+        height="100vh"
+        overscroll={1}
         CellComponent={CellComponent}
         {...props} />
   )

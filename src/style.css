@@ -152,6 +152,12 @@
 }
 
 .spreadsheet .value-cell {
-  background-color: #fff;
+  border-right: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
   cursor: cell
+}
+
+.spreadsheet.no-grid .value-cell {
+  border-right: none;
+  border-bottom: none;
 }

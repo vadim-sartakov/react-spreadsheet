@@ -1,58 +1,37 @@
 import React, { useRef, useCallback } from 'react';
 import { useScroller, ScrollerContainer } from '@vadim-sartakov/react-scroller';
+import useSpreadsheet from './useSpreadsheet';
+import ScrollableArea from './ScrollableArea';
 import SpreadsheetCell from './SpreadsheetCell';
 
 const Spreadsheet = inputProps => {
-  const scrollerContainerRef = useRef();
-  const scrollerProps = useScroller({ ...inputProps, value: inputProps.cells, scrollerContainerRef });
+  const spreadsheetProps = useSpreadsheet(inputProps);
 
   const {
-    scroller,
-    onScroll,
-    scrollAreaStyle,
-    visibleAreaStyle,
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
+    width,
+    height,
+    noGrid,
+    cells,
     CellComponent,
     ...resultProps
-  } = { ...inputProps, ...scrollerProps };
+  } = { ...inputProps, ...spreadsheetProps };
 
-  // Handle fixed areas scroll here
   const handleScroll = useCallback(event => {
-    onScroll(event);
-  }, [onScroll]);
+    
+  }, []);
 
-  const renderCells = ({ rowIndex, visibleColumnsIndexes }) => {
-    return visibleColumnsIndexes.map(columnIndex => (
-      <SpreadsheetCell
-          key={columnIndex}
-          Component={CellComponent}
-          rowIndex={rowIndex}
-          columnIndex={columnIndex} />
-    ));
-  };
-
-  const renderRows = visibleRowsIndexes => {
-    return visibleRowsIndexes.map(rowIndex => (
-      <div key={rowIndex} className="row">
-        {renderCells({ rowIndex, visibleColumnsIndexes })}
-      </div>
-    ))
-  };
+  const resultClassName = `spreadsheet${noGrid ? ' no-grid' : ''}`;
 
   return (
-    <ScrollerContainer
-        {...resultProps}
-        className="spreadsheet"
-        ref={scrollerContainerRef}
-        onScroll={handleScroll}
-        value={inputProps.cells}>
-      <div style={scrollAreaStyle}>
-        <div style={visibleAreaStyle}>
-          {renderRows(visibleRowsIndexes)}
-        </div>
-      </div>
-    </ScrollerContainer>
+    <div style={{ width, height }} className={resultClassName}>
+      <ScrollableArea
+          CellComponent={CellComponent}
+          value={cells}
+          width="100%"
+          height="100%"
+          onScroll={handleScroll}
+          {...resultProps} />
+    </div>
   );
 };
 
