@@ -92,14 +92,14 @@
   background-color: #dadada;
 }
 
-.spreadsheet .heading-row-number {
+.spreadsheet .row-heading {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
   cursor: pointer;
 }
 
-.spreadsheet .heading-column-number {
+.spreadsheet .column-heading {
   display: flex;
   align-items: center;
   justify-content: center;

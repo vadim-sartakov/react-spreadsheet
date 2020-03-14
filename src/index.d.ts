@@ -109,9 +109,9 @@ export interface SpreadsheetProps extends UseSpreadsheetOptions {
    * If default style imported, then grid will be hidden.
    */
   noGrid?: boolean;
-  /** Height of special row with column numbers */
+  /** Height of special row with column numbers. Default is 20 */
   columnHeadingHeight?: number;
-  /** Width of special column with row numbers */
+  /** Width of special column with row numbers. Default is 120 */
   rowHeadingWidth?: number;
   /** 
    * Width and height of groups special rows and columns.
