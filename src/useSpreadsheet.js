@@ -19,12 +19,12 @@ const useSpreadsheet = ({
 
   const [rowsState, setRowsState] = useState(defaultRows || []);
   let rows = rowsProp || rowsState;
-  rows = [...new Array(totalRows).keys()].map(key => ({ ...rows[key], key })).filter(row => !row || !row.hidden);
+  rows = useMemo(() => [...new Array(totalRows).keys()].map(key => ({ ...rows[key], key })).filter(row => !row || !row.hidden), [totalRows, rows]);
   const onRowsChange = onRowsChangeProp || setRowsState;
 
   const [columnsState, setColumnsState] = useState(defaultColumns || []);
   let columns = columnsProp || columnsState;
-  columns = [...new Array(totalColumns).keys()].map(key => ({ ...columns[key], key })).filter(column => !column || !column.hidden);
+  columns = useMemo(() => [...new Array(totalColumns).keys()].map(key => ({ ...columns[key], key })).filter(column => !column || !column.hidden), [totalColumns, columns]);
   const onColumnsChange = onColumnsChangeProp || setColumnsState;
 
   const rowsSizes = useMemo(() => rows.map(row => row.size), [rows]);
