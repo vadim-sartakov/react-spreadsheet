@@ -12,7 +12,8 @@ const ColumnsHeadings = ({
   defaultColumnWidth,
   columns,
   totalColumns,
-  columnsScrollData
+  columnsScrollData,
+  width
 }) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
   return !hideHeadings && (
@@ -23,14 +24,13 @@ const ColumnsHeadings = ({
         value={columnsHeadingsValue}
         height={columnHeadingHeight}
         columnsSizes={columnsSizes}
-        style={{ overflow: 'hidden', position: 'sticky', top: 0 }}
+        style={{ overflow: 'hidden', position: 'sticky', top: 0, zIndex: 1, width }}
         overscroll={overscroll}
         totalRows={1}
         totalColumns={totalColumns}
         defaultColumnWidth={defaultColumnWidth}
         defaultRowHeight={columnHeadingHeight}
-        columnsScrollData={columnsScrollData}
-        staticContainer />
+        columnsScrollData={columnsScrollData} />
   )
 };
 
@@ -71,7 +71,8 @@ const Spreadsheet = inputProps => {
         defaultColumnWidth={defaultColumnWidth}
         hideHeadings={hideHeadings}
         columnsScrollData={columnsScrollData}
-        overscroll={overscroll} />
+        overscroll={overscroll}
+        width={scrollAreaStyle.width} />
   );
 
   const valueElements = visibleRowsIndexes.map(rowIndex => {
@@ -87,9 +88,9 @@ const Spreadsheet = inputProps => {
         className={resultClassName}
         value={cells}
         {...props}>
+      {columnsHeadings}
       <div style={scrollAreaStyle}>
         <div style={visibleAreaStyle}>
-          {columnsHeadings}
           {valueElements}
         </div>
       </div>
