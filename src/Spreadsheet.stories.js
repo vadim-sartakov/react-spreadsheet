@@ -30,7 +30,7 @@ export const defaultComponent = props => {
         totalRows={cells.length}
         totalColumns={cells[0].length}
         height="100vh"
-        overscroll={1}
+        overscroll={2}
         CellComponent={CellComponent}
         columnHeadingHeight={20}
         {...props} />
