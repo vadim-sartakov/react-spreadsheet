@@ -9,10 +9,6 @@ const HeadingsIntersection = ({ rowHeadingWidth, columnHeadingHeight }) => {
     <div
         className="heading-cell heading-intersection"
         style={{
-          position: 'sticky',
-          left: 0,
-          top: 0,
-          zIndex: 2,
           width: rowHeadingWidth,
           height: columnHeadingHeight
         }} />
@@ -27,8 +23,7 @@ const ColumnsHeadings = forwardRef(({
   defaultColumnWidth,
   columns,
   totalColumns,
-  columnsScrollData,
-  width
+  columnsScrollData
 }, ref) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
   return !hideHeadings && (
@@ -40,7 +35,7 @@ const ColumnsHeadings = forwardRef(({
         value={columnsHeadingsValue}
         height={columnHeadingHeight}
         columnsSizes={columnsSizes}
-        style={{ overflow: 'hidden', position: 'sticky', top: 0, zIndex: 1, width }}
+        className="columns-headings"
         overscroll={overscroll}
         totalRows={1}
         totalColumns={totalColumns}
@@ -69,7 +64,7 @@ const RowsHeadings = forwardRef(({
         value={rows}
         width={rowHeadingWidth}
         rowsSizes={rowsSizes}
-        style={{ overflow: 'hidden', position: 'sticky', left: 0, zIndex: 1 }}
+        className="rows-headings"
         overscroll={overscroll}
         totalColumns={1}
         totalRows={totalRows}
