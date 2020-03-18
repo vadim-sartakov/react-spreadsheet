@@ -4,6 +4,21 @@ import useSpreadsheet from './useSpreadsheet';
 import SpreadsheetCell from './SpreadsheetCell';
 import Heading from './Heading';
 
+const HeadingsIntersection = ({ rowHeadingWidth, columnHeadingHeight }) => {
+  return (
+    <div
+        className="heading-cell heading-intersection"
+        style={{
+          position: 'sticky',
+          left: 0,
+          top: 0,
+          zIndex: 2,
+          width: rowHeadingWidth,
+          height: columnHeadingHeight
+        }} />
+  );
+};
+
 const ColumnsHeadings = forwardRef(({
   overscroll,
   hideHeadings,
@@ -35,14 +50,52 @@ const ColumnsHeadings = forwardRef(({
   )
 });
 
+const RowsHeadings = forwardRef(({
+  overscroll,
+  hideHeadings,
+  rowHeadingWidth = 40,
+  rowsSizes,
+  defaultRowHeight,
+  rows,
+  totalRows,
+  rowsScrollData
+}, ref) => {
+  return !hideHeadings && (
+    <Scroller
+        ref={ref}
+        CellComponent={Heading}
+        cellComponentProps={{ mode: 'row' }}
+        rowComponentProps={{ className: 'row' }}
+        value={rows}
+        width={rowHeadingWidth}
+        rowsSizes={rowsSizes}
+        style={{ overflow: 'hidden', position: 'sticky', left: 0, zIndex: 1 }}
+        overscroll={overscroll}
+        totalColumns={1}
+        totalRows={totalRows}
+        defaultColumnWidth={rowHeadingWidth}
+        defaultRowHeight={defaultRowHeight}
+        rowsScrollData={rowsScrollData} />
+  )
+});
+
 const Spreadsheet = inputProps => {
+  const [rowsScrollData, onRowsScrollDataChange] = useState();
   const [columnsScrollData, onColumnsScrollDataChange] = useState();
   // Storing root container ref on root level to prveent excessive updates of inner scrollers
   const scrollerContainerRef = useRef();
 
   const spreadsheetProps = useSpreadsheet(inputProps);
   let props = { ...inputProps, ...spreadsheetProps };
-  const scrollerProps = useScroller({ ...props, value: props.cells, columnsScrollData, onColumnsScrollDataChange, scrollerContainerRef });
+  const scrollerProps = useScroller({
+    ...props,
+    value: props.cells,
+    rowsScrollData,
+    onRowsScrollDataChange,
+    columnsScrollData,
+    onColumnsScrollDataChange,
+    scrollerContainerRef
+  });
   props = { ...props, ...scrollerProps };
 
   const {
@@ -53,10 +106,15 @@ const Spreadsheet = inputProps => {
     hideHeadings,
     noGrid,
     cells,
+    rowsSizes,
     columnsSizes,
+    rows,
     columns,
+    rowHeadingWidth,
     columnHeadingHeight,
+    totalRows,
     totalColumns,
+    defaultRowHeight,
     defaultColumnWidth,
     overscroll,
     CellComponent
@@ -64,7 +122,7 @@ const Spreadsheet = inputProps => {
 
   const resultClassName = `spreadsheet${noGrid ? ' no-grid' : ''}`;
 
-  const columnsHeadings = (
+  const columnsHeadingsElement = (
     <ColumnsHeadings
         ref={scrollerContainerRef}
         columns={columns}
@@ -76,6 +134,19 @@ const Spreadsheet = inputProps => {
         columnsScrollData={columnsScrollData}
         overscroll={overscroll}
         width={scrollAreaStyle.width} />
+  );
+
+  const rowsHeadingsElement = (
+    <RowsHeadings
+        ref={scrollerContainerRef}
+        rows={rows}
+        rowHeadingWidth={rowHeadingWidth}
+        totalRows={totalRows}
+        rowsSizes={rowsSizes}
+        defaultRowHeight={defaultRowHeight}
+        hideHeadings={hideHeadings}
+        rowsScrollData={rowsScrollData}
+        overscroll={overscroll} />
   );
 
   const valueElements = visibleRowsIndexes.map(rowIndex => {
@@ -90,8 +161,11 @@ const Spreadsheet = inputProps => {
         ref={scrollerContainerRef}
         className={resultClassName}
         value={cells}
+        style={{ display: 'grid', gridTemplateColumns: `${rowHeadingWidth}px auto` }}
         {...props}>
-      {columnsHeadings}
+      <HeadingsIntersection rowHeadingWidth={rowHeadingWidth} columnHeadingHeight={columnHeadingHeight} />
+      {columnsHeadingsElement}
+      {rowsHeadingsElement}
       <div style={scrollAreaStyle}>
         <div style={visibleAreaStyle}>
           {valueElements}

@@ -33,6 +33,7 @@ export const defaultComponent = props => {
         overscroll={2}
         CellComponent={CellComponent}
         columnHeadingHeight={20}
+        rowHeadingWidth={40}
         {...props} />
   )
 };
