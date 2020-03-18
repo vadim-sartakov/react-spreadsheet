@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, forwardRef } from 'react';
 import Scroller, { useScroller, ScrollerContainer } from '@vadim-sartakov/react-scroller';
 import useSpreadsheet from './useSpreadsheet';
 import SpreadsheetCell from './SpreadsheetCell';
 import Heading from './Heading';
 
-const ColumnsHeadings = ({
+const ColumnsHeadings = forwardRef(({
   overscroll,
   hideHeadings,
   columnHeadingHeight = 20,
@@ -14,10 +14,11 @@ const ColumnsHeadings = ({
   totalColumns,
   columnsScrollData,
   width
-}) => {
+}, ref) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
   return !hideHeadings && (
     <Scroller
+        ref={ref}
         CellComponent={Heading}
         cellComponentProps={{ mode: 'column' }}
         rowComponentProps={{ className: 'row' }}
@@ -32,18 +33,19 @@ const ColumnsHeadings = ({
         defaultRowHeight={columnHeadingHeight}
         columnsScrollData={columnsScrollData} />
   )
-};
+});
 
 const Spreadsheet = inputProps => {
   const [columnsScrollData, onColumnsScrollDataChange] = useState();
-  
+  // Storing root container ref on root level to prveent excessive updates of inner scrollers
+  const scrollerContainerRef = useRef();
+
   const spreadsheetProps = useSpreadsheet(inputProps);
   let props = { ...inputProps, ...spreadsheetProps };
-  const scrollerProps = useScroller({ ...props, value: props.cells, columnsScrollData, onColumnsScrollDataChange });
+  const scrollerProps = useScroller({ ...props, value: props.cells, columnsScrollData, onColumnsScrollDataChange, scrollerContainerRef });
   props = { ...props, ...scrollerProps };
 
   const {
-    scrollerContainerRef,
     visibleRowsIndexes,
     visibleColumnsIndexes,
     scrollAreaStyle,
@@ -64,6 +66,7 @@ const Spreadsheet = inputProps => {
 
   const columnsHeadings = (
     <ColumnsHeadings
+        ref={scrollerContainerRef}
         columns={columns}
         columnHeadingHeight={columnHeadingHeight}
         totalColumns={totalColumns}
