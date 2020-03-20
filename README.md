@@ -8,6 +8,7 @@ Live examples available [here](https://vadim-sartakov.github.io/react-spreadshee
 Documentation available [here](https://vadim-sartakov.github.io/react-spreadsheet/docs/).
 
 ## Features
+- Rows/columns resizing;
 - Fixed rows and columns;
 - Merged cells;
 - Custom cells;

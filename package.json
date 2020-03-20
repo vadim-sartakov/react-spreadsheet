@@ -18,9 +18,9 @@
   "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf lib && mkdir lib && cross-env NODE_ENV=production babel src --out-dir lib --ignore src/**/*.stories.js,src/**/*.test.js && copyfiles -u 1 src/**/*.d.ts lib && copyfiles -u 1 src/**/*.css lib",
-    "test": "jest",
-    "storybook": "start-storybook -p 9009 -s public",
+    "build": "rm -rf lib && mkdir lib && cross-env NODE_ENV=production babel src --out-dir lib --ignore src/**/*.stories.js,src/**/*.test.js,src/setupTests.js && copyfiles -u 1 src/**/*.d.ts lib && copyfiles -u 1 src/**/*.css lib",
+    "test": "react-scripts test",
+    "storybook": "start-storybook -p 9009",
     "build-storybook": "rm -rf docs/storybook && build-storybook -s public -o docs/storybook",
     "build-docs": "rm -rf docs/docs && typedoc --includeDeclarations --excludeExternals --ignoreCompilerErrors --out docs/docs --readme README.md src/"
   },
@@ -40,32 +40,32 @@
     ]
   },
   "peerDependencies": {
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "dependencies": {
     "@vadim-sartakov/react-scroller": "vadim-sartakov/react-scroller#build"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/preset-react": "^7.8.3",
-    "@storybook/addon-actions": "^5.3.14",
-    "@storybook/addon-links": "^5.3.14",
-    "@storybook/addons": "^5.3.14",
-    "@storybook/preset-create-react-app": "^2.0.0",
-    "@storybook/react": "^5.3.14",
-    "@types/react": "^16.9.23",
-    "babel-jest": "^25.1.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.0",
+    "@storybook/addon-actions": "^5.3.17",
+    "@storybook/addon-links": "^5.3.17",
+    "@storybook/addons": "^5.3.17",
+    "@storybook/preset-create-react-app": "^2.1.0",
+    "@storybook/react": "^5.3.17",
+    "@types/react": "^16.9.25",
     "copyfiles": "^2.2.0",
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "enzyme-to-json": "^3.4.4",
-    "jest": "^25.1.0",
     "node-sass": "^4.13.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-scripts": "^3.4.0",
-    "typedoc": "^0.16.11"
+    "typedoc": "^0.17.1"
   },
   "jest": {
     "snapshotSerializers": [
