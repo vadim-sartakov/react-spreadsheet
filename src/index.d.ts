@@ -95,6 +95,10 @@ export interface UseSpreadsheetOptions {
 export interface UseSpreadsheetResult {
   selectedCells?: CellsRange[];
   onSelectedCellsChange?: Dispatch<SetStateAction<CellsRange[]>>;
+  rowsSizes: number[];
+  columnsSizes: number[];
+  onRowsSizesChange: Dispatch<SetStateAction<number[]>>;
+  onColumnsSizesChange: Dispatch<SetStateAction<number[]>>;
 }
 
 export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult

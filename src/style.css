@@ -123,6 +123,7 @@
   align-items: flex-end;
   justify-content: flex-end;
   cursor: pointer;
+  position: relative;
 }
 
 .spreadsheet .column-heading {
@@ -130,6 +131,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
 }
 
 .spreadsheet .heading-resizer {

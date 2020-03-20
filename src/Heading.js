@@ -1,15 +1,19 @@
 import React from 'react';
+import Resizer from './Resizer';
 
-const Heading = ({ value, mode, style }) => {
-  let className;
-  if (mode === 'row') {
+const Heading = ({ value, type, rowIndex, columnIndex, style, sizes, defaultSize, onSizesChange }) => {
+  let className, index;
+  if (type === 'row') {
     className = 'row-heading';
-  } else if (mode === 'column') {
+    index = rowIndex;
+  } else if (type === 'column') {
     className = 'column-heading';
+    index = columnIndex;
   }
   return (
     <div className={`heading-cell ${className}`} style={style}>
       {value.key + 1}
+      <Resizer type={type} index={index} defaultSize={defaultSize} sizes={sizes} onSizesChange={onSizesChange} />
     </div>
   );
 };

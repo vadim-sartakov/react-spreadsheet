@@ -20,6 +20,7 @@ const ColumnsHeadings = forwardRef(({
   hideHeadings,
   columnHeadingHeight = 20,
   columnsSizes,
+  onColumnsSizesChange,
   defaultColumnWidth,
   columns,
   totalColumns,
@@ -31,7 +32,12 @@ const ColumnsHeadings = forwardRef(({
     <Scroller
         ref={ref}
         CellComponent={Heading}
-        cellComponentProps={{ mode: 'column' }}
+        cellComponentProps={{
+          type: 'column',
+          defaultSize: defaultColumnWidth,
+          sizes: columnsSizes,
+          onSizesChange: onColumnsSizesChange
+        }}
         rowComponentProps={{ className: 'row' }}
         value={columnsHeadingsValue}
         height={columnHeadingHeight}
@@ -51,6 +57,7 @@ const RowsHeadings = forwardRef(({
   hideHeadings,
   rowHeadingWidth = 40,
   rowsSizes,
+  onRowsSizesChange,
   defaultRowHeight,
   rows,
   totalRows,
@@ -61,7 +68,12 @@ const RowsHeadings = forwardRef(({
     <Scroller
         ref={ref}
         CellComponent={Heading}
-        cellComponentProps={{ mode: 'row' }}
+        cellComponentProps={{
+          type: 'row',
+          defaultSize: defaultRowHeight,
+          sizes: rowsSizes,
+          onSizesChange: onRowsSizesChange
+        }}
         rowComponentProps={{ className: 'row' }}
         value={rows}
         width={rowHeadingWidth}
@@ -114,7 +126,9 @@ const Spreadsheet = inputProps => {
     noGrid,
     cells,
     rowsSizes,
+    onRowsSizesChange,
     columnsSizes,
+    onColumnsSizesChange,
     rows,
     columns,
     rowHeadingWidth,
@@ -136,6 +150,7 @@ const Spreadsheet = inputProps => {
         columnHeadingHeight={columnHeadingHeight}
         totalColumns={totalColumns}
         columnsSizes={columnsSizes}
+        onColumnsSizesChange={onColumnsSizesChange}
         defaultColumnWidth={defaultColumnWidth}
         hideHeadings={hideHeadings}
         columnsScrollData={columnsScrollData}
@@ -151,6 +166,7 @@ const Spreadsheet = inputProps => {
         rowHeadingWidth={rowHeadingWidth}
         totalRows={totalRows}
         rowsSizes={rowsSizes}
+        onRowsSizesChange={onRowsSizesChange}
         defaultRowHeight={defaultRowHeight}
         hideHeadings={hideHeadings}
         rowsScrollData={rowsScrollData}

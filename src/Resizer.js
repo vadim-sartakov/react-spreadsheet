@@ -1,32 +1,40 @@
 import React, { useCallback, useRef, useEffect } from 'react'
 
-const Resizer = ({ className, startSizes, onResize }) => {
+const propertiesMap = {
+  row: {
+    coordinate: 'clientY'
+  },
+  column: {
+    coordinate: 'clientX'
+  }
+};
+
+const defaultArray = [];
+
+const Resizer = ({ type, index, defaultSize, sizes = defaultArray, onSizesChange }) => {
   const interactionRef = useRef();
 
   const handleMouseDown = useCallback(event => {
     event.persist();
     event.stopPropagation();
+    const startSize = sizes[index] || defaultSize;
     interactionRef.current = {
-      startCoordinates: { x: event.clientX, y: event.clientY },
-      startSizes
+      startCoordinate: event[propertiesMap[type].coordinate],
+      startSize
     };
-  }, [startSizes]);
+  }, [type, index, defaultSize, sizes]);
 
   useEffect(() => {
     const handleMouseMove = event => {
       const interaction = interactionRef.current;
       if (!interaction) return;
-      const diffX = event.clientX - interaction.startCoordinates.x;
-      const diffY = event.clientY - interaction.startCoordinates.y;
-
-      let nextWidth = interaction.startSizes.width + diffX;
-      let nextHeight = interaction.startSizes.height + diffY;
-
-      const nextSizes = {
-        width: nextWidth,
-        height: nextHeight
-      };
-      onResize(nextSizes);
+      const diff = event[propertiesMap[type].coordinate] - interaction.startCoordinate;
+      const nextSize = interaction.startSize + diff;
+      onSizesChange(sizes => {
+        const nextSizes = [...sizes];
+        nextSizes[index] = nextSize;
+        return nextSizes;
+      });
     };
 
     const handleMouseUp = () => {
@@ -40,9 +48,9 @@ const Resizer = ({ className, startSizes, onResize }) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [onResize]);
+  }, [type, index, onSizesChange]);
 
-  return <div className={`heading-resizer${className ? ` ${className}` : ''}`} onMouseDown={handleMouseDown} />;
+  return <div className={`heading-resizer ${type}`} onMouseDown={handleMouseDown} />;
 };
 
 export default Resizer;
