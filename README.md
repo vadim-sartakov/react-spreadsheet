@@ -5,6 +5,8 @@ React Excel like data grid component.
 ## Demo and Documentation
 Live examples available [here](https://vadim-sartakov.github.io/react-spreadsheet/storybook/).
 
+Documentation available [here](https://vadim-sartakov.github.io/react-spreadsheet/docs/).
+
 ## Features
 - Fixed rows and columns;
 - Merged cells;
