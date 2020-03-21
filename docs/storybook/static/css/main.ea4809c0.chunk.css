@@ -126,6 +126,7 @@
   align-items: flex-end;
   justify-content: flex-end;
   cursor: pointer;
+  position: relative;
 }
 
 .spreadsheet .column-heading {
@@ -133,6 +134,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: relative;
 }
 
 .spreadsheet .heading-resizer {
@@ -144,7 +146,7 @@
           user-select: none;
 }
 
-.spreadsheet .heading-row-resizer {
+.spreadsheet .heading-resizer.row {
   left: 0;
   right: 0;
   bottom: 0;
@@ -152,7 +154,7 @@
   cursor: ns-resize;
 }
 
-.spreadsheet .heading-column-resizer {
+.spreadsheet .heading-resizer.column {
   right: 0;
   top: 0;
   bottom: 0;
@@ -194,4 +196,4 @@
   border-bottom: none;
 }
 
-/*# sourceMappingURL=main.51d004b2.chunk.css.map*/
+/*# sourceMappingURL=main.ea4809c0.chunk.css.map*/
