@@ -2,6 +2,10 @@
   color: #212529;
   border-spacing: 0;
   font-size: 14px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .spreadsheet .columns-headings {
@@ -196,4 +200,4 @@
   border-bottom: none;
 }
 
-/*# sourceMappingURL=main.ea4809c0.chunk.css.map*/
+/*# sourceMappingURL=main.0950055a.chunk.css.map*/

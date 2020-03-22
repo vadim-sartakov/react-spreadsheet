@@ -1,8 +1,7 @@
 import React from 'react';
-import { ScrollerCell } from '@vadim-sartakov/react-scroller';
 
-const SpreadsheetCell = props => {
-  return <ScrollerCell {...props} />;
+const SpreadsheetCell = ({ InnerComponent, value, ...props }) => {
+  return <InnerComponent cell={value} {...props} />;
 };
 
 export default SpreadsheetCell;

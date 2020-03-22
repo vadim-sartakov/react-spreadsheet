@@ -17,7 +17,7 @@ const generateCells = (rowsCount, columnsCount) => {
 
 const cells = generateCells(1000, 50);
 
-const CellComponent = ({ value: cell, style }) => {
+const CellComponent = ({ cell, style }) => {
   return <div className="cell value-cell" style={style}>{cell.value}</div>
 };
 

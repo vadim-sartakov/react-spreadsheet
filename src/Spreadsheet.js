@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef, forwardRef, useCallback } from 'react';
-import Scroller, { useScroller, ScrollerContainer } from '@vadim-sartakov/react-scroller';
+import Scroller, { useScroller, ScrollerContainer, renderCells } from '@vadim-sartakov/react-scroller';
 import useSpreadsheet from './useSpreadsheet';
 import SpreadsheetCell from './SpreadsheetCell';
 import Heading from './Heading';
@@ -95,6 +95,15 @@ const Spreadsheet = inputProps => {
   const scrollerContainerRef = useRef();
 
   const spreadsheetProps = useSpreadsheet(inputProps);
+  const {
+    cells,
+    rows,
+    columns,
+    rowsSizes,
+    onRowsSizesChange,
+    columnsSizes,
+    onColumnsSizesChange
+  } = spreadsheetProps;
 
   const [scrolledTop, setScrolledTop] = useState(false);
   const [scrolledLeft, setScrolledLeft] = useState(false);
@@ -104,10 +113,11 @@ const Spreadsheet = inputProps => {
     setScrolledLeft(e.target.scrollLeft > 0 ? true : false);
   }, []);
 
-  let props = { ...inputProps, ...spreadsheetProps };
   const scrollerProps = useScroller({
-    ...props,
-    value: props.cells,
+    ...inputProps,
+    rowsSizes,
+    columnsSizes,
+    value: spreadsheetProps.cells,
     rowsScrollData,
     onRowsScrollDataChange,
     columnsScrollData,
@@ -115,33 +125,32 @@ const Spreadsheet = inputProps => {
     scrollerContainerRef,
     onScroll: handleScroll
   });
-  props = { ...props, ...scrollerProps };
 
   const {
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
-    scrollAreaStyle,
-    visibleAreaStyle,
-    hideHeadings,
-    noGrid,
-    cells,
-    rowsSizes,
-    onRowsSizesChange,
-    columnsSizes,
-    onColumnsSizesChange,
-    rows,
-    columns,
+    style,
+    className,
+    defaultRowHeight,
+    defaultColumnWidth,
     rowHeadingWidth,
     columnHeadingHeight,
     totalRows,
     totalColumns,
-    defaultRowHeight,
-    defaultColumnWidth,
     overscroll,
-    CellComponent
-  } = props;
+    hideHeadings,
+    noGrid,
+    width,
+    height,
+    CellComponent,
+    ...restInputProps
+  } = inputProps;
 
-  const resultClassName = `spreadsheet${noGrid ? ' no-grid' : ''}`;
+  const {
+    visibleRowsIndexes,
+    visibleColumnsIndexes,
+    onScroll,
+    scrollAreaStyle,
+    visibleAreaStyle
+  } = scrollerProps;
 
   const columnsHeadingsElement = (
     <ColumnsHeadings
@@ -174,20 +183,28 @@ const Spreadsheet = inputProps => {
         scrolledLeft={scrolledLeft} />
   );
 
-  const valueElements = visibleRowsIndexes.map(rowIndex => {
-    const columnsElements = visibleColumnsIndexes.map(columnIndex => {
-      return <SpreadsheetCell key={columnIndex} Component={CellComponent} rowIndex={rowIndex} columnIndex={columnIndex} />
-    });
-    return <div key={rowIndex} className="row">{columnsElements}</div>;
+  const valueElements = renderCells({
+    visibleRowsIndexes,
+    visibleColumnsIndexes,
+    rowComponentProps: { className: 'row' },
+    CellComponent: SpreadsheetCell,
+    cellComponentProps: { InnerComponent: CellComponent }
   });
 
   return (
     <ScrollerContainer
+        {...restInputProps}
         ref={scrollerContainerRef}
-        className={resultClassName}
+        defaultRowHeight={defaultRowHeight}
+        defaultColumnWidth={defaultColumnWidth}
+        width={width}
+        height={height}
+        className={`spreadsheet${className ? ` ${className}`: ''}${noGrid ? ' no-grid' : ''}`}
         value={cells}
-        style={{ display: 'grid', gridTemplateColumns: `${rowHeadingWidth}px auto` }}
-        {...props}>
+        style={{ ...style, display: 'grid', gridTemplateColumns: `${rowHeadingWidth}px auto` }}
+        onScroll={onScroll}
+        rowsSizes={rowsSizes}
+        columnsSizes={columnsSizes}>
       <HeadingsIntersection rowHeadingWidth={rowHeadingWidth} columnHeadingHeight={columnHeadingHeight} />
       {columnsHeadingsElement}
       {rowsHeadingsElement}
