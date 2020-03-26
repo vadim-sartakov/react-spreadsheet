@@ -81,14 +81,13 @@ const Spreadsheet = inputProps => {
     totalRows,
     totalColumns,
     overscroll,
-    scrolledTop,
-    scrolledLeft,
     CellComponent
   };
 
   const fixedRowsElement = fixRows ? (
     <SpreadsheetView
         {...spreadsheetViewProps}
+        scrolledLeft={scrolledLeft}
         totalRows={fixRows}
         className={`fixed-rows last-row${scrolledTop ? ' scrolled' : ''}`}
         style={{ overflow: 'initial' }}
@@ -100,6 +99,8 @@ const Spreadsheet = inputProps => {
   const bodyElement = (
     <SpreadsheetView
         {...spreadsheetViewProps}
+        scrolledTop={scrolledTop}
+        scrolledLeft={scrolledLeft}
         rowsScrollData={rowsScrollData}
         columnsScrollData={columnsScrollData}
         hideColumnsHeadings={fixRows}
