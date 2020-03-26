@@ -12,7 +12,7 @@ const Heading = ({ value, type, rowIndex, columnIndex, style, sizes, defaultSize
   }
   return (
     <div className={`heading-cell ${className}`} style={style}>
-      {value.key + 1}
+      {value && value.key + 1}
       <Resizer type={type} index={index} defaultSize={defaultSize} sizes={sizes} onSizesChange={onSizesChange} />
     </div>
   );

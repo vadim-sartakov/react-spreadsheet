@@ -4,7 +4,7 @@ import Heading from './Heading';
 
 const ColumnsHeadings = forwardRef(({
   overscroll,
-  hideHeadings,
+  hideColumnsHeadings,
   columnHeadingHeight = 20,
   columnsSizes,
   onColumnsSizesChange,
@@ -15,7 +15,7 @@ const ColumnsHeadings = forwardRef(({
   scrolledTop
 }, ref) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
-  return !hideHeadings && (
+  return !hideColumnsHeadings ? (
     <Scroller
       ref={ref}
       CellComponent={Heading}
@@ -36,7 +36,7 @@ const ColumnsHeadings = forwardRef(({
       defaultColumnWidth={defaultColumnWidth}
       defaultRowHeight={columnHeadingHeight}
       columnsScrollData={columnsScrollData} />
-  )
+  ) : null;
 });
 
 export default ColumnsHeadings;

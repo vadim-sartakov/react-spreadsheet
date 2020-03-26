@@ -80,13 +80,13 @@ const useSpreadsheet = ({
     return hideHeadings ? 0 : rowHeadingWidth;
   }, [hideHeadings, rowHeadingWidth]);
 
-  const fixedRowsSize = useMemo(() => fixColumns ? getCellsSize({
+  const fixedColumnsSize = useMemo(() => fixColumns ? getCellsSize({
     count: fixColumns,
     sizes: columnsSizes,
     defaultSize: defaultColumnWidth
   }) : 0, [fixColumns, defaultColumnWidth, columnsSizes]);
 
-  const fixedColumnsSize = useMemo(() => fixRows ? getCellsSize({
+  const fixedRowsSize = useMemo(() => fixRows ? getCellsSize({
     count: fixRows,
     sizes: rowsSizes,
     defaultSize: defaultRowHeight
@@ -94,8 +94,8 @@ const useSpreadsheet = ({
 
   const containerStyle = useMemo(() => ({
     display: 'grid',
-    gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}${fixedColumnsSize ? `${fixedColumnsSize}px ` : ''}auto`
-  }), [hideHeadings, rowHeadingWidth, fixedColumnsSize]);
+    gridTemplateColumns: `${fixedColumnsSize ? `${fixedColumnsSize}px ` : ''}auto`
+  }), [fixedColumnsSize]);
 
   return {
     scrollerContainerRef,

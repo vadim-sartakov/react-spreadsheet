@@ -15,10 +15,10 @@ const generateCells = (rowsCount, columnsCount) => {
   });
 };
 
-const cells = generateCells(1000, 50);
+let cells = generateCells(1000, 50);
 
 const CellComponent = ({ cell, style }) => {
-  return <div className="cell value-cell" style={style}>{cell.value}</div>
+  return <div className="cell value-cell" style={style}>{cell && cell.value}</div>
 };
 
 export const defaultComponent = props => {
@@ -27,8 +27,8 @@ export const defaultComponent = props => {
         defaultRowHeight={30}
         defaultColumnWidth={120}
         cells={cells}
-        totalRows={cells.length}
-        totalColumns={cells[0].length}
+        totalRows={1000}
+        totalColumns={50}
         height="100vh"
         overscroll={2}
         CellComponent={CellComponent}
@@ -59,4 +59,4 @@ export const fixedRowsColumns = props => {
 
 storiesOf('Spreadsheet', module)
     .add('default', defaultComponent)
-    /*.add('fixed rows and columns', fixedRowsColumns)*/;
+    .add('fixed rows and columns', fixedRowsColumns);
