@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { ScrollData } from '@vadim-sartakov/react-scroller';
 
 export interface Font {
   name?: string;
@@ -90,29 +91,8 @@ export interface UseSpreadsheetOptions {
   totalColumns: number;
   fixRows?: number;
   fixColumns?: number;
-}
-
-export interface UseSpreadsheetResult {
-  selectedCells?: CellsRange[];
-  onSelectedCellsChange?: Dispatch<SetStateAction<CellsRange[]>>;
-  rowsSizes: number[];
-  columnsSizes: number[];
-  onRowsSizesChange: Dispatch<SetStateAction<number[]>>;
-  onColumnsSizesChange: Dispatch<SetStateAction<number[]>>;
-}
-
-export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult
-
-export interface SpreadsheetProps extends UseSpreadsheetOptions {
-  width?: number | string;
-  height: number | string;
   /** If set to 'true' then rows/columns headings won't be rendered */
   hideHeadings?: boolean;
-  /**
-   * If set to 'true' then special 'no-grid' class will be appended to root.
-   * If default style imported, then grid will be hidden.
-   */
-  noGrid?: boolean;
   /** Height of special row with column numbers. Default is 20 */
   columnHeadingHeight?: number;
   /** Width of special column with row numbers. Default is 120 */
@@ -122,5 +102,39 @@ export interface SpreadsheetProps extends UseSpreadsheetOptions {
    * These areas serve for group buttons rendering and group lines.
    */
   groupSize?: number;
+}
+
+export interface UseSpreadsheetResult {
+  scrollerContainerRef: MutableRefObject<Element>;
+  rowsScrollData: ScrollData;
+  onRowsScrollDataChange: Dispatch<SetStateAction<ScrollData>>;
+  columnsScrollData: ScrollData;
+  onColumnsScrollDataChange: Dispatch<SetStateAction<ScrollData>>;
+  onScroll: UIEvent;
+  selectedCells?: CellsRange[];
+  onSelectedCellsChange?: Dispatch<SetStateAction<CellsRange[]>>;
+  rowsSizes: number[];
+  columnsSizes: number[];
+  onRowsSizesChange: Dispatch<SetStateAction<number[]>>;
+  onColumnsSizesChange: Dispatch<SetStateAction<number[]>>;
+  specialRowsSize: number;
+  specialColumnsSize: number;
+  /** Whether container has been scrolled top */
+  scrolledTop: boolean;
+  /** Whether container has been scrolled left */
+  scrolledLeft: boolean;
+}
+
+export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult
+
+export interface SpreadsheetProps extends UseSpreadsheetOptions {
+  width?: number | string;
+  height: number | string;
+  
+  /**
+   * If set to 'true' then special 'no-grid' class will be appended to root.
+   * If default style imported, then grid will be hidden.
+   */
+  noGrid?: boolean;
   mergedCells?: CellsRange[];
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import Resizer from './Resizer';
+import Resizer from '../Resizer';
 
 const Heading = ({ value, type, rowIndex, columnIndex, style, sizes, defaultSize, onSizesChange }) => {
   let className, index;

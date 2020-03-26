@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 
 const useSpreadsheet = ({
   defaultCells,
@@ -11,8 +11,16 @@ const useSpreadsheet = ({
   columns: columnsProp,
   onColumnsChange: onColumnsChangeProp,
   totalRows,
-  totalColumns
+  totalColumns,
+  hideHeadings,
+  columnHeadingHeight,
+  rowHeadingWidth
 }) => {
+  const [rowsScrollData, onRowsScrollDataChange] = useState();
+  const [columnsScrollData, onColumnsScrollDataChange] = useState();
+  // Storing root container ref on root level to prveent excessive updates of inner scrollers
+  const scrollerContainerRef = useRef();
+
   const [cellsState, setCellsState] = useState(defaultCells || []);
   const cells = cellsProp || cellsState;
   const onCellsChange = onCellsChangeProp || setCellsState;
@@ -52,7 +60,28 @@ const useSpreadsheet = ({
     });
   }, [onColumnsChange]);
 
+  const [scrolledTop, setScrolledTop] = useState(false);
+  const [scrolledLeft, setScrolledLeft] = useState(false);
+
+  const onScroll = useCallback(e => {
+    setScrolledTop(e.target.scrollTop > 0 ? true : false);
+    setScrolledLeft(e.target.scrollLeft > 0 ? true : false);
+  }, []);
+
+  const specialRowsSize = useMemo(() => {
+    return hideHeadings ? 0 : columnHeadingHeight;
+  }, [hideHeadings, columnHeadingHeight]);
+  const specialColumnsSize = useMemo(() => {
+    return hideHeadings ? 0 : rowHeadingWidth;
+  }, [hideHeadings, rowHeadingWidth]);
+
   return {
+    scrollerContainerRef,
+    rowsScrollData,
+    onRowsScrollDataChange,
+    columnsScrollData,
+    onColumnsScrollDataChange,
+    onScroll,
     cells,
     onCellsChange,
     rows,
@@ -62,7 +91,11 @@ const useSpreadsheet = ({
     rowsSizes,
     onRowsSizesChange,
     columnsSizes,
-    onColumnsSizesChange
+    onColumnsSizesChange,
+    specialRowsSize,
+    specialColumnsSize,
+    scrolledTop,
+    scrolledLeft
   };
 };
 
