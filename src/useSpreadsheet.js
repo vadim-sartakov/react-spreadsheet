@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useRef } from 'react';
+import { getCellsSize } from '@vadim-sartakov/react-scroller/lib/utils';
 
 const useSpreadsheet = ({
   defaultCells,
@@ -10,11 +11,15 @@ const useSpreadsheet = ({
   defaultColumns,
   columns: columnsProp,
   onColumnsChange: onColumnsChangeProp,
+  defaultRowHeight,
+  defaultColumnWidth,
   totalRows,
   totalColumns,
   hideHeadings,
   columnHeadingHeight,
-  rowHeadingWidth
+  rowHeadingWidth,
+  fixRows,
+  fixColumns
 }) => {
   const [rowsScrollData, onRowsScrollDataChange] = useState();
   const [columnsScrollData, onColumnsScrollDataChange] = useState();
@@ -75,6 +80,23 @@ const useSpreadsheet = ({
     return hideHeadings ? 0 : rowHeadingWidth;
   }, [hideHeadings, rowHeadingWidth]);
 
+  const fixedRowsSize = useMemo(() => fixColumns ? getCellsSize({
+    count: fixColumns,
+    sizes: columnsSizes,
+    defaultSize: defaultColumnWidth
+  }) : 0, [fixColumns, defaultColumnWidth, columnsSizes]);
+
+  const fixedColumnsSize = useMemo(() => fixRows ? getCellsSize({
+    count: fixRows,
+    sizes: rowsSizes,
+    defaultSize: defaultRowHeight
+  }) : 0, [fixRows, defaultRowHeight, rowsSizes]);
+
+  const containerStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}auto`
+  }), [hideHeadings, rowHeadingWidth]);
+
   return {
     scrollerContainerRef,
     rowsScrollData,
@@ -95,7 +117,10 @@ const useSpreadsheet = ({
     specialRowsSize,
     specialColumnsSize,
     scrolledTop,
-    scrolledLeft
+    scrolledLeft,
+    fixedRowsSize,
+    fixedColumnsSize,
+    containerStyle
   };
 };
 

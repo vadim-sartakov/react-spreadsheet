@@ -1,6 +1,5 @@
 import React, { useMemo, forwardRef } from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
-import { getCellsSize } from '@vadim-sartakov/react-scroller/lib/utils';
 
 const FixedRowsColumnsIntersection = forwardRef(({
   cells: cellsProp,
@@ -11,20 +10,12 @@ const FixedRowsColumnsIntersection = forwardRef(({
   defaultColumnWidth,
   fixRows,
   fixColumns,
+  fixedRowsSize: width,
+  fixedColumnsSize: height,
   CellComponent
 }, ref) => {
   const rowsSizes = useMemo(() => rowsSizesProp.slice(0, fixRows), [rowsSizesProp, fixRows]);
   const columnsSizes = useMemo(() => columnsSizesProp.slice(0, fixColumns), [columnsSizesProp, fixColumns])
-  const width = useMemo(() => fixColumns && getCellsSize({
-    count: fixColumns,
-    sizes: columnsSizes,
-    defaultSize: defaultColumnWidth
-  }), [fixColumns, defaultColumnWidth, columnsSizes]);
-  const height = useMemo(() => fixRows && getCellsSize({
-    count: fixRows,
-    sizes: rowsSizes,
-    defaultSize: defaultRowHeight
-  }), [fixRows, defaultRowHeight, rowsSizes]);
   const cells = useMemo(() => {
     if (!fixRows || !fixColumns) return [];
     return cellsProp

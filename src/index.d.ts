@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { Dispatch, SetStateAction, MutableRefObject, CSSProperties } from 'react';
 import { ScrollData } from '@vadim-sartakov/react-scroller';
 
 export interface Font {
@@ -89,6 +89,8 @@ export interface UseSpreadsheetOptions {
   onColumnsChange?: Dispatch<SetStateAction<Meta[]>>;
   totalRows: number;
   totalColumns: number;
+  defaultRowHeight: number;
+  defaultColumnWidth: number;
   fixRows?: number;
   fixColumns?: number;
   /** If set to 'true' then rows/columns headings won't be rendered */
@@ -102,6 +104,8 @@ export interface UseSpreadsheetOptions {
    * These areas serve for group buttons rendering and group lines.
    */
   groupSize?: number;
+  fixRows?: number;
+  fixColumns?: number;
 }
 
 export interface UseSpreadsheetResult {
@@ -123,6 +127,9 @@ export interface UseSpreadsheetResult {
   scrolledTop: boolean;
   /** Whether container has been scrolled left */
   scrolledLeft: boolean;
+  fixedRowsSize: number;
+  fixedColumnsSize: number;
+  containerStyle: CSSProperties;
 }
 
 export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult

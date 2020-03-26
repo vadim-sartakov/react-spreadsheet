@@ -25,7 +25,8 @@ const Spreadsheet = inputProps => {
     onColumnsScrollDataChange,
     onScroll: handleScroll,
     scrolledTop,
-    scrolledLeft
+    scrolledLeft,
+    containerStyle
   } = spreadsheetProps;
 
   const scrollerProps = useScroller({
@@ -116,7 +117,7 @@ const Spreadsheet = inputProps => {
         height={height}
         className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
         value={cells}
-        style={{ ...style, display: 'grid', gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}auto` }}
+        style={{ ...style, ...containerStyle }}
         onScroll={onScroll}
         rowsSizes={rowsSizes}
         columnsSizes={columnsSizes}>
