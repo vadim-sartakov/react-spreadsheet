@@ -1,11 +1,7 @@
 import React from 'react';
-import { useScroller, ScrollerContainer, renderCells } from '@vadim-sartakov/react-scroller';
-import HeadingsIntersection from './headings/HeadingsIntersection';
-import ColumnsHeadings from './headings/ColumnsHeadings';
-import RowsHeadings from './headings/RowsHeadings';
-import FixedRowsColumnsIntersection from './fixed/FixedRowsColumnsIntersection';
+import { useScroller } from '@vadim-sartakov/react-scroller';
+import SpreadsheetView from './SpreadsheetView';
 import useSpreadsheet from './useSpreadsheet';
-import SpreadsheetCell from './SpreadsheetCell';
 
 const Spreadsheet = inputProps => {
   const spreadsheetProps = useSpreadsheet(inputProps);
@@ -44,6 +40,7 @@ const Spreadsheet = inputProps => {
     scrollerContainerRef,
     onScroll: handleScroll
   });
+  const { onScroll, scrollAreaStyle } = scrollerProps;
 
   const {
     cells: inputCells,
@@ -66,90 +63,42 @@ const Spreadsheet = inputProps => {
     ...restInputProps
   } = inputProps;
 
-  const {
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
-    onScroll,
-    scrollAreaStyle,
-    visibleAreaStyle
-  } = scrollerProps;
-
-  const columnsHeadingsElement = (
-    <ColumnsHeadings
+  const bodyElement = (
+    <SpreadsheetView
         ref={scrollerContainerRef}
-        columns={columns}
-        columnHeadingHeight={columnHeadingHeight}
-        totalColumns={totalColumns}
-        columnsSizes={columnsSizes}
-        onColumnsSizesChange={onColumnsSizesChange}
-        defaultColumnWidth={defaultColumnWidth}
-        hideHeadings={hideHeadings}
-        columnsScrollData={columnsScrollData}
-        overscroll={overscroll}
-        scrolledTop={scrolledTop} />
-  );
-
-  const rowsHeadingsElement = (
-    <RowsHeadings
-        ref={scrollerContainerRef}
+        cells={cells}
         rows={rows}
-        rowHeadingWidth={rowHeadingWidth}
-        totalRows={totalRows}
+        columns={columns}
         rowsSizes={rowsSizes}
         onRowsSizesChange={onRowsSizesChange}
-        defaultRowHeight={defaultRowHeight}
-        hideHeadings={hideHeadings}
-        rowsScrollData={rowsScrollData}
-        overscroll={overscroll}
-        scrolledLeft={scrolledLeft} />
-  );
-
-  const fixedRowsColumnsIntersectionElement = (
-    <FixedRowsColumnsIntersection
-        cells={cells}
-        rowsSizes={rowsSizes}
         columnsSizes={columnsSizes}
-        overscroll={overscroll}
+        onColumnsSizesChange={onColumnsSizesChange}
         defaultRowHeight={defaultRowHeight}
         defaultColumnWidth={defaultColumnWidth}
-        fixRows={fixRows}
-        fixColumns={fixColumns}
-        fixedRowsSize={fixedRowsSize}
-        fixedColumnsSize={fixedColumnsSize}
+        columnHeadingHeight={columnHeadingHeight}
+        rowHeadingWidth={rowHeadingWidth}
+        totalRows={totalRows}
+        totalColumns={totalColumns}
+        rowsScrollData={rowsScrollData}
+        columnsScrollData={columnsScrollData}
+        hideRowsHeadings={hideHeadings}
+        hideColumnsHeadings={hideHeadings}
+        overscroll={overscroll}
+        scrolledTop={scrolledTop}
+        scrolledLeft={scrolledLeft}
+        width={scrollAreaStyle.width}
         CellComponent={CellComponent} />
   );
 
-  const valueElements = renderCells({
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
-    rowComponentProps: { className: 'row' },
-    CellComponent: SpreadsheetCell,
-    cellComponentProps: { InnerComponent: CellComponent }
-  });
-
   return (
-    <ScrollerContainer
+    <div
         {...restInputProps}
         ref={scrollerContainerRef}
-        defaultRowHeight={defaultRowHeight}
-        defaultColumnWidth={defaultColumnWidth}
-        width={width}
-        height={height}
         className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
-        value={cells}
-        style={{ ...style, ...containerStyle }}
-        onScroll={onScroll}
-        rowsSizes={rowsSizes}
-        columnsSizes={columnsSizes}>
-      <HeadingsIntersection hideHeadings={hideHeadings} rowHeadingWidth={rowHeadingWidth} columnHeadingHeight={columnHeadingHeight} />
-      {columnsHeadingsElement}
-      {rowsHeadingsElement}
-      <div style={scrollAreaStyle}>
-        <div style={visibleAreaStyle}>
-          {valueElements}
-        </div>
-      </div>
-    </ScrollerContainer>
+        style={{ ...style, ...containerStyle, overflow: 'auto', width, height }}
+        onScroll={onScroll}>
+      {bodyElement}
+    </div>
   );
 };
 

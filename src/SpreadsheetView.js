@@ -79,7 +79,9 @@ const MergedCells = () => {
   )
 };
 
-const SpreadsheetView = ({
+const SpreadsheetView = forwardRef(({
+  style,
+  className,
   cells,
   rows,
   columns,
@@ -103,9 +105,16 @@ const SpreadsheetView = ({
   scrolledTop,
   scrolledLeft,
   CellComponent
-}) => {
+}, ref) => {
+  const containerStyle = {
+    display: 'grid',
+    gridTemplateColumns: `${hideRowsHeadings ? '' : `${rowHeadingWidth}px `}auto`
+  };
   return (
     <Scroller
+        ref={ref}
+        style={{ ...style, ...containerStyle }}
+        className={className}
         value={cells}
         rowsSizes={rowsSizes}
         columnsSizes={columnsSizes}
@@ -113,6 +122,7 @@ const SpreadsheetView = ({
         defaultColumnWidth={defaultColumnWidth}
         totalRows={totalRows}
         totalColumns={totalColumns}
+        rowComponentProps={{ className: 'row' }}
         CellComponent={SpreadsheetCell}
         cellComponentProps={{ InnerComponent: CellComponent }}
         rowsScrollData={rowsScrollData}
@@ -144,6 +154,6 @@ const SpreadsheetView = ({
         }}
         PostOuterComponent={MergedCells} />
   )
-};
+});
 
 export default SpreadsheetView;

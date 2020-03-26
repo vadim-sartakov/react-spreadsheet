@@ -59,4 +59,4 @@ export const fixedRowsColumns = props => {
 
 storiesOf('Spreadsheet', module)
     .add('default', defaultComponent)
-    .add('fixed rows and columns', fixedRowsColumns);
+    /*.add('fixed rows and columns', fixedRowsColumns)*/;
