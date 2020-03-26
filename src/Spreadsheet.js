@@ -4,8 +4,8 @@ import useSpreadsheet from './useSpreadsheet';
 import SpreadsheetCell from './SpreadsheetCell';
 import Heading from './Heading';
 
-const HeadingsIntersection = ({ rowHeadingWidth, columnHeadingHeight }) => {
-  return (
+const HeadingsIntersection = ({ hideHeadings, rowHeadingWidth, columnHeadingHeight }) => {
+  return !hideHeadings && (
     <div
         className="heading-cell heading-intersection"
         style={{
@@ -201,11 +201,11 @@ const Spreadsheet = inputProps => {
         height={height}
         className={`spreadsheet${className ? ` ${className}`: ''}${noGrid ? ' no-grid' : ''}`}
         value={cells}
-        style={{ ...style, display: 'grid', gridTemplateColumns: `${rowHeadingWidth}px auto` }}
+        style={{ ...style, display: 'grid', gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}auto` }}
         onScroll={onScroll}
         rowsSizes={rowsSizes}
         columnsSizes={columnsSizes}>
-      <HeadingsIntersection rowHeadingWidth={rowHeadingWidth} columnHeadingHeight={columnHeadingHeight} />
+      <HeadingsIntersection hideHeadings={hideHeadings} rowHeadingWidth={rowHeadingWidth} columnHeadingHeight={columnHeadingHeight} />
       {columnsHeadingsElement}
       {rowsHeadingsElement}
       <div style={scrollAreaStyle}>
