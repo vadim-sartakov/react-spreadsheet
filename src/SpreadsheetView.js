@@ -85,7 +85,7 @@ function getArraySubset({ array, startRowIndex = 0, endRowIndex, startColumnInde
 };
 
 function restoreArrayFromSubset({ sourceArray, arraySubset, startIndex = 0, totalCount }) {
-  return [...new Array(totalCount).keys()].map((rowIndex) => {
+  return [...new Array(totalCount + startIndex).keys()].map((rowIndex) => {
     const row = sourceArray[rowIndex];
     const subsetRow = arraySubset[rowIndex - startIndex];
     return subsetRow || row;
