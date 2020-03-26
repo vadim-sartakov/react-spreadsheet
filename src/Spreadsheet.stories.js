@@ -52,7 +52,7 @@ export const fixedRowsColumns = props => {
         columnHeadingHeight={20}
         rowHeadingWidth={40}
         fixRows={2}
-        fixColumns={2}
+        //fixColumns={2}
         {...props} />
   )
 };

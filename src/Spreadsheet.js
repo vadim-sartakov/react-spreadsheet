@@ -3,6 +3,7 @@ import { useScroller, ScrollerContainer, renderCells } from '@vadim-sartakov/rea
 import HeadingsIntersection from './headings/HeadingsIntersection';
 import ColumnsHeadings from './headings/ColumnsHeadings';
 import RowsHeadings from './headings/RowsHeadings';
+import FixedRowsColumnsIntersection from './fixed/FixedRowsColumnsIntersection';
 import useSpreadsheet from './useSpreadsheet';
 import SpreadsheetCell from './SpreadsheetCell';
 
@@ -26,6 +27,8 @@ const Spreadsheet = inputProps => {
     onScroll: handleScroll,
     scrolledTop,
     scrolledLeft,
+    fixedRowsSize,
+    fixedColumnsSize,
     containerStyle
   } = spreadsheetProps;
 
@@ -43,6 +46,7 @@ const Spreadsheet = inputProps => {
   });
 
   const {
+    cells: inputCells,
     style,
     className,
     defaultRowHeight,
@@ -56,6 +60,8 @@ const Spreadsheet = inputProps => {
     noGrid,
     width,
     height,
+    fixRows,
+    fixColumns,
     CellComponent,
     ...restInputProps
   } = inputProps;
@@ -80,7 +86,6 @@ const Spreadsheet = inputProps => {
         hideHeadings={hideHeadings}
         columnsScrollData={columnsScrollData}
         overscroll={overscroll}
-        width={scrollAreaStyle.width}
         scrolledTop={scrolledTop} />
   );
 
@@ -97,6 +102,21 @@ const Spreadsheet = inputProps => {
         rowsScrollData={rowsScrollData}
         overscroll={overscroll}
         scrolledLeft={scrolledLeft} />
+  );
+
+  const fixedRowsColumnsIntersectionElement = (
+    <FixedRowsColumnsIntersection
+        cells={cells}
+        rowsSizes={rowsSizes}
+        columnsSizes={columnsSizes}
+        overscroll={overscroll}
+        defaultRowHeight={defaultRowHeight}
+        defaultColumnWidth={defaultColumnWidth}
+        fixRows={fixRows}
+        fixColumns={fixColumns}
+        fixedRowsSize={fixedRowsSize}
+        fixedColumnsSize={fixedColumnsSize}
+        CellComponent={CellComponent} />
   );
 
   const valueElements = renderCells({

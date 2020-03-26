@@ -1,7 +1,7 @@
 import React from 'react';
 
-const HeadingsIntersection = ({ hideHeadings, rowHeadingWidth, columnHeadingHeight }) => {
-  return !hideHeadings && (
+const HeadingsIntersection = ({ hideRowsHeadings, hideColumnsHeadings, rowHeadingWidth, columnHeadingHeight }) => {
+  return !hideRowsHeadings && !hideColumnsHeadings && (
     <div
       className="heading-cell heading-intersection"
       style={{
