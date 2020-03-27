@@ -6,54 +6,6 @@ import SpreadsheetView from './FixedView';
 import useSpreadsheet from './useSpreadsheet';
 
 const Spreadsheet = forwardRef((inputProps, inputRef) => {
-  const spreadsheetProps = useSpreadsheet(inputProps);
-  const {
-    scrollerContainerRef,
-    cells,
-    rows,
-    columns,
-    rowsSizes,
-    onRowsSizesChange,
-    columnsSizes,
-    onColumnsSizesChange,
-    specialRowsSize,
-    //specialColumnsSize,
-    rowsScrollData,
-    onRowsScrollDataChange,
-    columnsScrollData,
-    onColumnsScrollDataChange,
-    onScroll: handleScroll,
-    scrolledTop,
-    scrolledLeft,
-    fixedRowsSize,
-    //fixedColumnsSize,
-    containerStyle
-  } = spreadsheetProps;
-
-  const rootRef = inputRef || scrollerContainerRef;
-
-  const scrollerProps = useScroller({
-    ...inputProps,
-    rowsSizes,
-    columnsSizes,
-    totalRows: inputProps.totalRows - (inputProps.fixRows || 0),
-    totalColumns: inputProps.totalColumns - (inputProps.fixColumns || 0),
-    value: spreadsheetProps.cells,
-    rowsScrollData,
-    onRowsScrollDataChange,
-    columnsScrollData,
-    onColumnsScrollDataChange,
-    scrollerContainerRef: rootRef,
-    onScroll: handleScroll
-  });
-  const {
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
-    onScroll,
-    scrollAreaStyle,
-    visibleAreaStyle
-  } = scrollerProps;
-
   const {
     cells: inputCells,
     style,
@@ -74,6 +26,51 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     CellComponent,
     ...restInputProps
   } = inputProps;
+  const spreadsheetProps = useSpreadsheet(inputProps);
+  const {
+    scrollerContainerRef,
+    cells,
+    rows,
+    columns,
+    rowsSizes,
+    onRowsSizesChange,
+    columnsSizes,
+    onColumnsSizesChange,
+    //specialRowsSize,
+    //specialColumnsSize,
+    rowsScrollData,
+    onRowsScrollDataChange,
+    columnsScrollData,
+    onColumnsScrollDataChange,
+    onScroll: handleScroll,
+    scrolledTop,
+    scrolledLeft,
+    fixedRowsSize,
+    fixedColumnsSize,
+    containerStyle
+  } = spreadsheetProps;
+
+  const rootRef = inputRef || scrollerContainerRef;
+
+  const scrollerProps = useScroller({
+    ...inputProps,
+    rowsSizes,
+    columnsSizes,
+    value: spreadsheetProps.cells,
+    rowsScrollData,
+    onRowsScrollDataChange,
+    columnsScrollData,
+    onColumnsScrollDataChange,
+    scrollerContainerRef: rootRef,
+    onScroll: handleScroll
+  });
+  const {
+    visibleRowsIndexes,
+    visibleColumnsIndexes,
+    onScroll,
+    scrollAreaStyle,
+    visibleAreaStyle
+  } = scrollerProps;
 
   const spreadsheetViewProps = {
     ref: rootRef,
@@ -100,11 +97,9 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         scrolledLeft={scrolledLeft}
         totalRows={fixRows}
         className={`fixed-rows last-row${scrolledTop ? ' scrolled' : ''}`}
-        // Without overflow: 'visible' horizontal scroll loses rows headings
+        // Without overflow: 'visible' horizontal scroll loses rows headings when scrolled right
         style={{ overflow: 'visible' }}
-        columnsScrollData={columnsScrollData}
-        height={fixedRowsSize + specialRowsSize}
-        endRowIndex={fixRows} />
+        columnsScrollData={columnsScrollData} />
   ) : null;
 
   const specialCellsElement = (
@@ -124,8 +119,8 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         onColumnsSizesChange={onColumnsSizesChange}
         rowHeadingWidth={rowHeadingWidth}
         columnHeadingHeight={columnHeadingHeight}
-        hideRowsHeadings={hideHeadings}
-        hideColumnsHeadings={hideHeadings}
+        hideRowsHeadings={fixColumns || hideHeadings}
+        hideColumnsHeadings={fixRows || hideHeadings}
         overscroll={overscroll}
         scrolledTop={scrolledTop}
         scrolledLeft={scrolledLeft} />
@@ -149,7 +144,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         {...restInputProps}
         ref={rootRef}
         className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
-        style={{ ...style, ...containerStyle, overflow: 'auto', width, height }}
+        style={{ ...style, ...containerStyle, overflow: 'auto' }}
         onScroll={onScroll}
         defaultRowHeight={defaultRowHeight}
         defaultColumnWidth={defaultColumnWidth}
@@ -159,7 +154,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         width={width}
         height={height}>
       {fixedRowsElement}
-      <div style={valueContainerStyle}>
+      <div style={{ ...valueContainerStyle, marginTop: -fixedRowsSize, marginLeft: -fixedColumnsSize }}>
         {specialCellsElement}
         <div style={scrollAreaStyle}>
           <div style={{ ...visibleAreaStyle }}>
