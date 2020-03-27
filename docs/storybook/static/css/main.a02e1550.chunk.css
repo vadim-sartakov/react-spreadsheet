@@ -8,25 +8,55 @@
           user-select: none;
 }
 
+.spreadsheet .fixed-rows-columns-intersection {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3
+}
+
+.spreadsheet .fixed-rows {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2
+}
+
+.spreadsheet .fixed-columns {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 2
+}
+
 .spreadsheet .columns-headings {
-  overflow: hidden;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 1;
 }
 
-.spreadsheet .last-row, .spreadsheet .last-column {
-  box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
-  transition: box-shadow 100ms ease-in-out;
-}
-
 .spreadsheet .rows-headings {
-  overflow: hidden;
   position: -webkit-sticky;
   position: sticky;
   left: 0;
   z-index: 1;
+}
+
+.spreadsheet .last-row, .spreadsheet .last-column {
+  box-shadow: none;
+  transition: box-shadow 100ms ease-in-out;
+}
+
+.spreadsheet .last-row.scrolled-row {
+  box-shadow: 0px 6px 5px -3px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 100ms ease-in-out;
+}
+
+.spreadsheet .last-column.scrolled-column {
+  box-shadow: 6px 0px 5px -3px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 100ms ease-in-out;
 }
 
 .spreadsheet .heading-intersection {
@@ -39,18 +69,11 @@
 
 .spreadsheet .cell {
   padding: 2px;
+  background-color: #fff;
 }
 
 .spreadsheet .row {
   display: flex;
-}
-
-.spreadsheet .fixed-rows {
-  border-bottom: solid 1px #a9a9a9
-}
-
-.spreadsheet .fixed-columns {
-  border-right: solid 1px #a9a9a9
 }
 
 .spreadsheet .group-button-container {
@@ -200,4 +223,4 @@
   border-bottom: none;
 }
 
-/*# sourceMappingURL=main.0950055a.chunk.css.map*/
+/*# sourceMappingURL=main.a02e1550.chunk.css.map*/

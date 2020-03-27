@@ -13,8 +13,6 @@ Documentation available [here](https://vadim-sartakov.github.io/react-spreadshee
 - Merged cells;
 - Custom cells;
 - Virtualized;
-- Lightweight;
-- Fast;
 
 ## Styling
 To get basic styling default styles could be imported:
