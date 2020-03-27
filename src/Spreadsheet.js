@@ -1,9 +1,11 @@
-import React from 'react';
-import { useScroller } from '@vadim-sartakov/react-scroller';
-import SpreadsheetView from './SpreadsheetView';
+import React, { forwardRef } from 'react';
+import { useScroller, ScrollerContainer, renderCells } from '@vadim-sartakov/react-scroller';
+import SpecialCells from './SpecialCells';
+import SpreadsheetCell from './SpreadsheetCell';
+import SpreadsheetView from './FixedView';
 import useSpreadsheet from './useSpreadsheet';
 
-const Spreadsheet = inputProps => {
+const Spreadsheet = forwardRef((inputProps, inputRef) => {
   const spreadsheetProps = useSpreadsheet(inputProps);
   const {
     scrollerContainerRef,
@@ -28,6 +30,8 @@ const Spreadsheet = inputProps => {
     containerStyle
   } = spreadsheetProps;
 
+  const rootRef = inputRef || scrollerContainerRef;
+
   const scrollerProps = useScroller({
     ...inputProps,
     rowsSizes,
@@ -39,10 +43,16 @@ const Spreadsheet = inputProps => {
     onRowsScrollDataChange,
     columnsScrollData,
     onColumnsScrollDataChange,
-    scrollerContainerRef,
+    scrollerContainerRef: rootRef,
     onScroll: handleScroll
   });
-  const { onScroll } = scrollerProps;
+  const {
+    visibleRowsIndexes,
+    visibleColumnsIndexes,
+    onScroll,
+    scrollAreaStyle,
+    visibleAreaStyle
+  } = scrollerProps;
 
   const {
     cells: inputCells,
@@ -66,7 +76,7 @@ const Spreadsheet = inputProps => {
   } = inputProps;
 
   const spreadsheetViewProps = {
-    ref: scrollerContainerRef,
+    ref: rootRef,
     cells,
     rows,
     columns,
@@ -97,30 +107,68 @@ const Spreadsheet = inputProps => {
         endRowIndex={fixRows} />
   ) : null;
 
-  const bodyElement = (
-    <SpreadsheetView
-        {...spreadsheetViewProps}
-        scrolledTop={scrolledTop}
-        scrolledLeft={scrolledLeft}
+  const specialCellsElement = (
+    <SpecialCells
+        ref={rootRef}
         rowsScrollData={rowsScrollData}
         columnsScrollData={columnsScrollData}
-        hideColumnsHeadings={fixRows}
-        startRowIndex={fixRows}
-        totalRows={totalRows - fixRows}
-        totalColumns={totalColumns - fixColumns} />
+        rows={rows}
+        columns={columns}
+        defaultRowHeight={defaultRowHeight}
+        defaultColumnWidth={defaultColumnWidth}
+        totalRows={totalRows}
+        totalColumns={totalColumns}
+        rowsSizes={rowsSizes}
+        onRowsSizesChange={onRowsSizesChange}
+        columnsSizes={columnsSizes}
+        onColumnsSizesChange={onColumnsSizesChange}
+        rowHeadingWidth={rowHeadingWidth}
+        columnHeadingHeight={columnHeadingHeight}
+        hideRowsHeadings={hideHeadings}
+        hideColumnsHeadings={hideHeadings}
+        overscroll={overscroll}
+        scrolledTop={scrolledTop}
+        scrolledLeft={scrolledLeft} />
   );
 
+  const bodyElements = renderCells({
+    visibleRowsIndexes,
+    visibleColumnsIndexes,
+    rowComponentProps: { className: 'row' },
+    CellComponent: SpreadsheetCell,
+    cellComponentProps: { InnerComponent: CellComponent }
+  });
+
+  const valueContainerStyle = {
+    display: 'grid',
+    gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}auto`
+  };
+
   return (
-    <div
+    <ScrollerContainer
         {...restInputProps}
-        ref={scrollerContainerRef}
+        ref={rootRef}
         className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
         style={{ ...style, ...containerStyle, overflow: 'auto', width, height }}
-        onScroll={onScroll}>
+        onScroll={onScroll}
+        defaultRowHeight={defaultRowHeight}
+        defaultColumnWidth={defaultColumnWidth}
+        rowsSizes={rowsSizes}
+        columnsSizes={columnsSizes}
+        value={cells}
+        width={width}
+        height={height}>
       {fixedRowsElement}
-      {bodyElement}
-    </div>
+      <div style={valueContainerStyle}>
+        {specialCellsElement}
+        <div style={scrollAreaStyle}>
+          <div style={{ ...visibleAreaStyle }}>
+            {bodyElements}
+          </div>
+        </div>
+      </div>
+    </ScrollerContainer>
   );
-};
+});
 
 export default Spreadsheet;

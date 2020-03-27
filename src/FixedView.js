@@ -1,96 +1,9 @@
 import React, { forwardRef, useMemo, useCallback } from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
 import SpreadsheetCell from './SpreadsheetCell';
-import HeadingsIntersection from './headings/HeadingsIntersection';
-import ColumnsHeadings from './headings/ColumnsHeadings';
-import RowsHeadings from './headings/RowsHeadings';
-
-const SpecialCells = forwardRef(({
-  rowsScrollData,
-  columnsScrollData,
-  rows,
-  columns,
-  defaultRowHeight,
-  defaultColumnWidth,
-  totalRows,
-  totalColumns,
-  rowsSizes,
-  onRowsSizesChange,
-  columnsSizes,
-  onColumnsSizesChange,
-  rowHeadingWidth,
-  columnHeadingHeight,
-  hideRowsHeadings,
-  hideColumnsHeadings,
-  overscroll,
-  scrolledTop,
-  scrolledLeft
-}, ref) => {
-  const headingsIntersectionElement = (
-    <HeadingsIntersection
-        hideRowsHeadings={hideRowsHeadings}
-        hideColumnsHeadings={hideColumnsHeadings}
-        rowHeadingWidth={rowHeadingWidth}
-        columnHeadingHeight={columnHeadingHeight} />
-  );
-
-  const columnsHeadingsElement = (
-    <ColumnsHeadings
-        ref={ref}
-        columns={columns}
-        columnHeadingHeight={columnHeadingHeight}
-        totalColumns={totalColumns}
-        columnsSizes={columnsSizes}
-        onColumnsSizesChange={onColumnsSizesChange}
-        defaultColumnWidth={defaultColumnWidth}
-        hideColumnsHeadings={hideColumnsHeadings}
-        columnsScrollData={columnsScrollData}
-        overscroll={overscroll}
-        scrolledTop={scrolledTop} />
-  );
-
-  const rowsHeadingsElement = (
-    <RowsHeadings
-        ref={ref}
-        rows={rows}
-        rowHeadingWidth={rowHeadingWidth}
-        totalRows={totalRows}
-        rowsSizes={rowsSizes}
-        onRowsSizesChange={onRowsSizesChange}
-        defaultRowHeight={defaultRowHeight}
-        hideRowsHeadings={hideRowsHeadings}
-        rowsScrollData={rowsScrollData}
-        overscroll={overscroll}
-        scrolledLeft={scrolledLeft} />
-  );
-  return (
-    <>
-      {headingsIntersectionElement}
-      {columnsHeadingsElement}
-      {rowsHeadingsElement}
-    </>
-  )
-});
-
-const MergedCells = () => {
-  return (
-    <>
-    </>
-  )
-};
-
-function getArraySubset({ array, startRowIndex = 0, endRowIndex, startColumnIndex = 0, endColumnIndex }) {
-  return array.slice(startRowIndex, endRowIndex)
-      .map(row => row && row.slice(startColumnIndex, endColumnIndex));
-};
-
-function restoreArrayFromSubset({ sourceArray, arraySubset, startIndex = 0, totalCount }) {
-  return [...new Array(totalCount + startIndex).keys()].map((rowIndex) => {
-    const row = sourceArray[rowIndex];
-    const subsetRow = arraySubset[rowIndex - startIndex];
-    return subsetRow || row;
-  });
-};
+import SpecialCells from './SpecialCells';
+import MergedCells from './MergedCells';
+import { getArraySubset, restoreArrayFromSubset } from './utils';
 
 const SpreadsheetView = forwardRef(({
   style,
