@@ -5,6 +5,13 @@
   user-select: none;
 }
 
+.spreadsheet .fixed-rows-columns-intersection {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3
+}
+
 .spreadsheet .fixed-rows {
   position: sticky;
   top: 0;
@@ -34,13 +41,18 @@
   transition: box-shadow 100ms ease-in-out;
 }
 
-.spreadsheet .last-row.scrolled {
+.spreadsheet .last-row.scrolled-row {
   box-shadow: 0px 6px 5px -3px rgba(0, 0, 0, 0.25);
   transition: box-shadow 100ms ease-in-out;
 }
 
-.spreadsheet .last-column.scrolled {
+.spreadsheet .last-column.scrolled-column {
   box-shadow: 6px 0px 5px -3px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 100ms ease-in-out;
+}
+
+.spreadsheet .last-column.last-row.scrolled-row.scrolled-column {
+  box-shadow: 6px 6px 5px -3px rgba(0, 0, 0, 0.25);
   transition: box-shadow 100ms ease-in-out;
 }
 

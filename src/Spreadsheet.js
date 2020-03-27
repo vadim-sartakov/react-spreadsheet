@@ -91,31 +91,45 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     CellComponent
   };
 
+  const fixedRowsColumnsIntersection = fixRows && fixColumns ? (
+    <SpreadsheetView
+        {...spreadsheetViewProps}
+        totalRows={fixRows}
+        totalColumns={fixColumns}
+        className={`fixed-rows-columns-intersection last-row last-column${scrolledTop ? ' scrolled-row' : ''}` }
+        // Explicit height and width prevents excessive calculations
+        height={fixedRowsSize + specialRowsSize}
+        width={fixedColumnsSize + specialColumnsSize}
+        style={{ overflow: 'hidden' }} />
+  ) : null;
+
   const fixedRowsElement = fixRows ? (
     <SpreadsheetView
         {...spreadsheetViewProps}
+        hideRowsHeadings={fixColumns}
         scrolledLeft={scrolledLeft}
         totalRows={fixRows}
-        className={`fixed-rows last-row${scrolledTop ? ' scrolled' : ''}`}
-        // By setting explicit height preventing excessive calculations
+        className={`fixed-rows last-row${scrolledTop ? ' scrolled-row' : ''}`}
         height={fixedRowsSize + specialRowsSize}
         // Without overflow: 'visible' horizontal scroll loses rows headings when scrolled right
         // This happens because by default scroller container sets overflow 'auto' style
         // and this breaks sticky columns because it can't reach root scroll container
         // for proper position calculation
         // (by spec nearest parent container with non default overflow property is picked for sticky element while scrolling)
-        style={{ overflow: 'visible' }}
+        style={{ overflow: 'visible', marginLeft: -fixedColumnsSize }}
         columnsScrollData={columnsScrollData} />
   ) : null;
 
   const fixedColumnsElement = fixColumns ? (
     <SpreadsheetView
         {...spreadsheetViewProps}
+        hideColumnsHeadings={fixRows}
         width={fixedColumnsSize + specialColumnsSize}
         scrolledTop={scrolledTop}
         totalColumns={fixColumns}
-        className={`fixed-columns last-column${scrolledLeft ? ' scrolled' : ''}`}
-        rowsScrollData={rowsScrollData} />
+        className={`fixed-columns last-column${scrolledLeft ? ' scrolled-column' : ''}`}
+        rowsScrollData={rowsScrollData}
+        style={{ marginTop: -fixedRowsSize }} />
   ) : null;
 
   const specialCellsElement = (
@@ -169,6 +183,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         value={cells}
         width={width}
         height={height}>
+      {fixedRowsColumnsIntersection}
       {fixedRowsElement}
       {fixedColumnsElement}
       <div style={{ ...valueContainerStyle, marginTop: -fixedRowsSize, marginLeft: -fixedColumnsSize }}>
