@@ -90,7 +90,8 @@ const Spreadsheet = inputProps => {
         scrolledLeft={scrolledLeft}
         totalRows={fixRows}
         className={`fixed-rows last-row${scrolledTop ? ' scrolled' : ''}`}
-        style={{ overflow: 'initial' }}
+        // Without overflow: 'visible' horizontal scroll loses rows headings
+        style={{ overflow: 'visible' }}
         columnsScrollData={columnsScrollData}
         height={fixedRowsSize + specialRowsSize}
         endRowIndex={fixRows} />
