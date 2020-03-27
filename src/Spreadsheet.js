@@ -36,8 +36,8 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     onRowsSizesChange,
     columnsSizes,
     onColumnsSizesChange,
-    //specialRowsSize,
-    //specialColumnsSize,
+    specialRowsSize,
+    specialColumnsSize,
     rowsScrollData,
     onRowsScrollDataChange,
     columnsScrollData,
@@ -97,9 +97,25 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         scrolledLeft={scrolledLeft}
         totalRows={fixRows}
         className={`fixed-rows last-row${scrolledTop ? ' scrolled' : ''}`}
+        // By setting explicit height preventing excessive calculations
+        height={fixedRowsSize + specialRowsSize}
         // Without overflow: 'visible' horizontal scroll loses rows headings when scrolled right
+        // This happens because by default scroller container sets overflow 'auto' style
+        // and this breaks sticky columns because it can't reach root scroll container
+        // for proper position calculation
+        // (by spec nearest parent container with non default overflow property is picked for sticky element while scrolling)
         style={{ overflow: 'visible' }}
         columnsScrollData={columnsScrollData} />
+  ) : null;
+
+  const fixedColumnsElement = fixColumns ? (
+    <SpreadsheetView
+        {...spreadsheetViewProps}
+        width={fixedColumnsSize + specialColumnsSize}
+        scrolledTop={scrolledTop}
+        totalColumns={fixColumns}
+        className={`fixed-columns last-column${scrolledLeft ? ' scrolled' : ''}`}
+        rowsScrollData={rowsScrollData} />
   ) : null;
 
   const specialCellsElement = (
@@ -136,7 +152,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
 
   const valueContainerStyle = {
     display: 'grid',
-    gridTemplateColumns: `${hideHeadings ? '' : `${rowHeadingWidth}px `}auto`
+    gridTemplateColumns: `${fixColumns || hideHeadings ? '' : `${rowHeadingWidth}px `}auto`
   };
 
   return (
@@ -154,6 +170,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
         width={width}
         height={height}>
       {fixedRowsElement}
+      {fixedColumnsElement}
       <div style={{ ...valueContainerStyle, marginTop: -fixedRowsSize, marginLeft: -fixedColumnsSize }}>
         {specialCellsElement}
         <div style={scrollAreaStyle}>

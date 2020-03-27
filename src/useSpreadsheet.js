@@ -94,8 +94,8 @@ const useSpreadsheet = ({
 
   const containerStyle = useMemo(() => ({
     display: 'grid',
-    gridTemplateColumns: `${fixedColumnsSize ? `${fixedColumnsSize}px ` : ''}auto`
-  }), [fixedColumnsSize]);
+    gridTemplateColumns: `${fixedColumnsSize ? `${fixedColumnsSize + specialColumnsSize}px ` : ''}auto`
+  }), [fixedColumnsSize, specialColumnsSize]);
 
   return {
     scrollerContainerRef,

@@ -14,7 +14,7 @@ const RowsHeadings = forwardRef(({
   rowsScrollData,
   scrolledLeft
 }, ref) => {
-  return !hideRowsHeadings ? (
+  return hideRowsHeadings ? null : (
     <Scroller
       ref={ref}
       CellComponent={Heading}
@@ -35,7 +35,7 @@ const RowsHeadings = forwardRef(({
       defaultColumnWidth={rowHeadingWidth}
       defaultRowHeight={defaultRowHeight}
       rowsScrollData={rowsScrollData} />
-  ) : null
+  );
 });
 
 export default RowsHeadings;

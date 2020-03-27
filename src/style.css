@@ -11,6 +11,12 @@
   z-index: 2
 }
 
+.spreadsheet .fixed-columns {
+  position: sticky;
+  left: 0;
+  z-index: 2
+}
+
 .spreadsheet .columns-headings {
   position: sticky;
   top: 0;

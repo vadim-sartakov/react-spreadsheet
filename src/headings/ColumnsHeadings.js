@@ -15,7 +15,7 @@ const ColumnsHeadings = forwardRef(({
   scrolledTop
 }, ref) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
-  return !hideColumnsHeadings ? (
+  return hideColumnsHeadings ? null : (
     <Scroller
       ref={ref}
       CellComponent={Heading}
@@ -36,7 +36,7 @@ const ColumnsHeadings = forwardRef(({
       defaultColumnWidth={defaultColumnWidth}
       defaultRowHeight={columnHeadingHeight}
       columnsScrollData={columnsScrollData} />
-  ) : null;
+  );
 });
 
 export default ColumnsHeadings;

@@ -51,8 +51,8 @@ export const fixedRowsColumns = props => {
         CellComponent={CellComponent}
         columnHeadingHeight={20}
         rowHeadingWidth={40}
-        fixRows={2}
-        //fixColumns={2}
+        //fixRows={2}
+        fixColumns={2}
         {...props} />
   )
 };
