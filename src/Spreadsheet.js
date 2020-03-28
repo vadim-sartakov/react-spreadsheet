@@ -5,7 +5,7 @@ import SpreadsheetCell from './SpreadsheetCell';
 import SpreadsheetView from './FixedView';
 import useSpreadsheet from './useSpreadsheet';
 
-const Spreadsheet = forwardRef((inputProps, inputRef) => {
+const Spreadsheet = forwardRef((inputProps, ref) => {
   const {
     cells: inputCells,
     style,
@@ -26,9 +26,9 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     CellComponent,
     ...restInputProps
   } = inputProps;
-  const spreadsheetProps = useSpreadsheet(inputProps);
+  const spreadsheetProps = useSpreadsheet({ ...inputProps, ref });
   const {
-    scrollerContainerRef,
+    spreadsheetContainerRef,
     cells,
     rows,
     columns,
@@ -50,8 +50,6 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     containerStyle
   } = spreadsheetProps;
 
-  const rootRef = inputRef || scrollerContainerRef;
-
   const scrollerProps = useScroller({
     ...inputProps,
     rowsSizes,
@@ -61,7 +59,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
     onRowsScrollDataChange,
     columnsScrollData,
     onColumnsScrollDataChange,
-    scrollerContainerRef: rootRef,
+    ref: spreadsheetContainerRef,
     onScroll: handleScroll
   });
   const {
@@ -73,7 +71,6 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
   } = scrollerProps;
 
   const spreadsheetViewProps = {
-    ref: rootRef,
     cells,
     rows,
     columns,
@@ -134,7 +131,6 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
 
   const specialCellsElement = (
     <SpecialCells
-        ref={rootRef}
         rowsScrollData={rowsScrollData}
         columnsScrollData={columnsScrollData}
         rows={rows}
@@ -172,7 +168,7 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
   return (
     <ScrollerContainer
         {...restInputProps}
-        ref={rootRef}
+        ref={spreadsheetContainerRef}
         className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
         style={{ ...style, ...containerStyle, overflow: 'auto' }}
         onScroll={onScroll}

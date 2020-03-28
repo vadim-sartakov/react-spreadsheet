@@ -1,8 +1,8 @@
-import React, { useMemo, forwardRef } from 'react';
+import React, { useMemo } from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
 import Heading from './Heading';
 
-const ColumnsHeadings = forwardRef(({
+const ColumnsHeadings = ({
   overscroll,
   hideColumnsHeadings,
   columnHeadingHeight = 20,
@@ -13,11 +13,10 @@ const ColumnsHeadings = forwardRef(({
   totalColumns,
   columnsScrollData,
   scrolledTop
-}, ref) => {
+}) => {
   const columnsHeadingsValue = useMemo(() => [columns], [columns]);
   return hideColumnsHeadings ? null : (
     <Scroller
-      ref={ref}
       CellComponent={Heading}
       cellComponentProps={{
         type: 'column',
@@ -37,6 +36,6 @@ const ColumnsHeadings = forwardRef(({
       defaultRowHeight={columnHeadingHeight}
       columnsScrollData={columnsScrollData} />
   );
-});
+};
 
 export default ColumnsHeadings;

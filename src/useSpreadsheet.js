@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useRef } from 'react';
 import { getCellsSize } from '@vadim-sartakov/react-scroller/lib/utils';
 
 const useSpreadsheet = ({
+  ref,
   defaultCells,
   cells: cellsProp,
   onCellsChange: onCellsChangeProp,
@@ -23,8 +24,9 @@ const useSpreadsheet = ({
 }) => {
   const [rowsScrollData, onRowsScrollDataChange] = useState();
   const [columnsScrollData, onColumnsScrollDataChange] = useState();
-  // Storing root container ref on root level to prveent excessive updates of inner scrollers
-  const scrollerContainerRef = useRef();
+
+  const spreadsheetContainerRefLocal = useRef();
+  const spreadsheetContainerRef = ref || spreadsheetContainerRefLocal;
 
   const [cellsState, setCellsState] = useState(defaultCells || []);
   const cells = cellsProp || cellsState;
@@ -98,7 +100,7 @@ const useSpreadsheet = ({
   }), [fixedColumnsSize, specialColumnsSize]);
 
   return {
-    scrollerContainerRef,
+    spreadsheetContainerRef,
     rowsScrollData,
     onRowsScrollDataChange,
     columnsScrollData,

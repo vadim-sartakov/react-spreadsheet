@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/vadim-sartakov/react-spreadsheetstatic/css/main.a02e1550.chunk.css",
-    "main.js": "/vadim-sartakov/react-spreadsheetmain.770369c9f3e37f24c1cb.bundle.js",
+    "main.js": "/vadim-sartakov/react-spreadsheetmain.c44903beafbd8dff412f.bundle.js",
     "main.css.map": "/vadim-sartakov/react-spreadsheetstatic/css/main.a02e1550.chunk.css.map",
-    "main.js.map": "/vadim-sartakov/react-spreadsheetmain.770369c9f3e37f24c1cb.bundle.js.map",
-    "runtime~main.js": "/vadim-sartakov/react-spreadsheetruntime~main.770369c9f3e37f24c1cb.bundle.js",
-    "runtime~main.js.map": "/vadim-sartakov/react-spreadsheetruntime~main.770369c9f3e37f24c1cb.bundle.js.map",
-    "vendors~main.js": "/vadim-sartakov/react-spreadsheetvendors~main.770369c9f3e37f24c1cb.bundle.js",
-    "vendors~main.js.map": "/vadim-sartakov/react-spreadsheetvendors~main.770369c9f3e37f24c1cb.bundle.js.map",
+    "main.js.map": "/vadim-sartakov/react-spreadsheetmain.c44903beafbd8dff412f.bundle.js.map",
+    "runtime~main.js": "/vadim-sartakov/react-spreadsheetruntime~main.c44903beafbd8dff412f.bundle.js",
+    "runtime~main.js.map": "/vadim-sartakov/react-spreadsheetruntime~main.c44903beafbd8dff412f.bundle.js.map",
+    "vendors~main.js": "/vadim-sartakov/react-spreadsheetvendors~main.c44903beafbd8dff412f.bundle.js",
+    "vendors~main.js.map": "/vadim-sartakov/react-spreadsheetvendors~main.c44903beafbd8dff412f.bundle.js.map",
     "iframe.html": "/vadim-sartakov/react-spreadsheetiframe.html",
-    "precache-manifest.d847e4c5d54089402a3189107edf4416.js": "/vadim-sartakov/react-spreadsheetprecache-manifest.d847e4c5d54089402a3189107edf4416.js",
+    "precache-manifest.352af5086e0bb3eb7e9eeb2bdcf1a538.js": "/vadim-sartakov/react-spreadsheetprecache-manifest.352af5086e0bb3eb7e9eeb2bdcf1a538.js",
     "service-worker.js": "/vadim-sartakov/react-spreadsheetservice-worker.js",
-    "vendors~main.770369c9f3e37f24c1cb.bundle.js.LICENSE.txt": "/vadim-sartakov/react-spreadsheetvendors~main.770369c9f3e37f24c1cb.bundle.js.LICENSE.txt"
+    "vendors~main.c44903beafbd8dff412f.bundle.js.LICENSE.txt": "/vadim-sartakov/react-spreadsheetvendors~main.c44903beafbd8dff412f.bundle.js.LICENSE.txt"
   },
   "entrypoints": [
-    "runtime~main.770369c9f3e37f24c1cb.bundle.js",
-    "vendors~main.770369c9f3e37f24c1cb.bundle.js",
+    "runtime~main.c44903beafbd8dff412f.bundle.js",
+    "vendors~main.c44903beafbd8dff412f.bundle.js",
     "static/css/main.a02e1550.chunk.css",
-    "main.770369c9f3e37f24c1cb.bundle.js"
+    "main.c44903beafbd8dff412f.bundle.js"
   ]
 }

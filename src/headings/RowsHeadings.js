@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
 import Heading from './Heading';
 
-const RowsHeadings = forwardRef(({
+const RowsHeadings = ({
   overscroll,
   hideRowsHeadings,
   rowHeadingWidth = 40,
@@ -13,10 +13,9 @@ const RowsHeadings = forwardRef(({
   totalRows,
   rowsScrollData,
   scrolledLeft
-}, ref) => {
+}) => {
   return hideRowsHeadings ? null : (
     <Scroller
-      ref={ref}
       CellComponent={Heading}
       cellComponentProps={{
         type: 'row',
@@ -36,6 +35,6 @@ const RowsHeadings = forwardRef(({
       defaultRowHeight={defaultRowHeight}
       rowsScrollData={rowsScrollData} />
   );
-});
+};
 
 export default RowsHeadings;

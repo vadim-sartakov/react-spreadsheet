@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import Scroller from '@vadim-sartakov/react-scroller';
 import SpreadsheetCell from './SpreadsheetCell';
 import SpecialCells from './SpecialCells';
 import MergedCells from './MergedCells';
 
-const SpreadsheetView = forwardRef(({
+const SpreadsheetView = ({
   style,
   className,
   cells,
@@ -30,14 +30,13 @@ const SpreadsheetView = forwardRef(({
   scrolledTop,
   scrolledLeft,
   CellComponent
-}, ref) => {
+}) => {
   const containerStyle = {
     display: 'grid',
     gridTemplateColumns: `${hideRowsHeadings ? '' : `${rowHeadingWidth}px `}auto`
   };
   return (
     <Scroller
-        ref={ref}
         style={{ ...style, ...containerStyle }}
         className={className}
         value={cells}
@@ -79,6 +78,6 @@ const SpreadsheetView = forwardRef(({
         }}
         PostOuterComponent={MergedCells} />
   )
-});
+};
 
 export default SpreadsheetView;

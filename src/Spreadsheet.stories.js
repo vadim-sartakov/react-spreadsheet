@@ -1,6 +1,6 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import Spreadsheet from './Spreadsheet';
+import { withKnobs, number } from '@storybook/addon-knobs';
 import './style.css';
 
 const generateMeta = count => {
@@ -21,7 +21,15 @@ const CellComponent = ({ cell, style }) => {
   return <div className="cell value-cell" style={style}>{cell && cell.value}</div>
 };
 
+export default {
+  Component: Spreadsheet,
+  title: 'Spreadsheet',
+  decorators: [withKnobs]
+};
+
 export const defaultComponent = props => {
+  const fixRows = number('Fix rows', 0, { min: 0 });
+  const fixColumns = number('Fix columns', 0, { min: 0 });
   return (
     <Spreadsheet
         defaultRowHeight={30}
@@ -34,6 +42,8 @@ export const defaultComponent = props => {
         CellComponent={CellComponent}
         columnHeadingHeight={20}
         rowHeadingWidth={40}
+        fixRows={fixRows}
+        fixColumns={fixColumns}
         {...props} />
   )
 };
@@ -92,9 +102,3 @@ export const fixedRowsAndColumns = props => {
         {...props} />
   )
 };
-
-storiesOf('Spreadsheet', module)
-    .add('default', defaultComponent)
-    .add('fixed rows', fixedRows)
-    .add('fixed columns', fixedColumns)
-    .add('fixed rows and columns', fixedRowsAndColumns);

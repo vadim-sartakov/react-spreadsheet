@@ -1,9 +1,9 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import HeadingsIntersection from './headings/HeadingsIntersection';
 import ColumnsHeadings from './headings/ColumnsHeadings';
 import RowsHeadings from './headings/RowsHeadings';
 
-const SpecialCells = forwardRef(({
+const SpecialCells = ({
   rowsScrollData,
   columnsScrollData,
   rows,
@@ -23,7 +23,7 @@ const SpecialCells = forwardRef(({
   overscroll,
   scrolledTop,
   scrolledLeft
-}, ref) => {
+}) => {
   const headingsIntersectionElement = (
     <HeadingsIntersection
         hideRowsHeadings={hideRowsHeadings}
@@ -34,7 +34,6 @@ const SpecialCells = forwardRef(({
 
   const columnsHeadingsElement = (
     <ColumnsHeadings
-        ref={ref}
         columns={columns}
         columnHeadingHeight={columnHeadingHeight}
         totalColumns={totalColumns}
@@ -49,7 +48,6 @@ const SpecialCells = forwardRef(({
 
   const rowsHeadingsElement = (
     <RowsHeadings
-        ref={ref}
         rows={rows}
         rowHeadingWidth={rowHeadingWidth}
         totalRows={totalRows}
@@ -68,6 +66,6 @@ const SpecialCells = forwardRef(({
       {rowsHeadingsElement}
     </>
   )
-});
+};
 
 export default SpecialCells;
