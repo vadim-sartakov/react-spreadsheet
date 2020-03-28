@@ -123,12 +123,13 @@ const Spreadsheet = forwardRef((inputProps, inputRef) => {
   const fixedColumnsElement = fixColumns ? (
     <SpreadsheetView
         {...spreadsheetViewProps}
+        hideColumnsHeadings={fixRows}
         width={fixedColumnsSize + specialColumnsSize}
         scrolledTop={scrolledTop}
         totalColumns={fixColumns}
         className={`fixed-columns last-column${scrolledLeft ? ' scrolled-column' : ''}`}
         rowsScrollData={rowsScrollData}
-        style={{ marginTop: -fixedRowsSize - specialRowsSize }} />
+        style={{ marginTop: -fixedRowsSize }} />
   ) : null;
 
   const specialCellsElement = (

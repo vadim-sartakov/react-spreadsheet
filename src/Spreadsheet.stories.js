@@ -38,7 +38,43 @@ export const defaultComponent = props => {
   )
 };
 
-export const fixedRowsColumns = props => {
+export const fixedRows = props => {
+  return (
+    <Spreadsheet
+        defaultRowHeight={30}
+        defaultColumnWidth={120}
+        cells={cells}
+        totalRows={cells.length}
+        totalColumns={cells[0].length}
+        height="100vh"
+        overscroll={2}
+        CellComponent={CellComponent}
+        columnHeadingHeight={20}
+        rowHeadingWidth={40}
+        fixRows={2}
+        {...props} />
+  )
+};
+
+export const fixedColumns = props => {
+  return (
+    <Spreadsheet
+        defaultRowHeight={30}
+        defaultColumnWidth={120}
+        cells={cells}
+        totalRows={cells.length}
+        totalColumns={cells[0].length}
+        height="100vh"
+        overscroll={2}
+        CellComponent={CellComponent}
+        columnHeadingHeight={20}
+        rowHeadingWidth={40}
+        fixColumns={2}
+        {...props} />
+  )
+};
+
+export const fixedRowsAndColumns = props => {
   return (
     <Spreadsheet
         defaultRowHeight={30}
@@ -59,4 +95,6 @@ export const fixedRowsColumns = props => {
 
 storiesOf('Spreadsheet', module)
     .add('default', defaultComponent)
-    .add('fixed rows and columns', fixedRowsColumns);
+    .add('fixed rows', fixedRows)
+    .add('fixed columns', fixedColumns)
+    .add('fixed rows and columns', fixedRowsAndColumns);
