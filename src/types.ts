@@ -1,5 +1,17 @@
 import { Dispatch, SetStateAction, MutableRefObject, CSSProperties } from 'react';
-import { ScrollData } from '@vadim-sartakov/react-scroller';
+import { ScrollData } from '@vadim-sartakov/react-scroller/lib/types';
+
+export enum HeadingType {
+  Row = 'row',
+  Column = 'column',
+}
+
+export interface HeadingMeta {
+  index: number;
+  size?: number;
+}
+
+// ----------------------------
 
 export interface Font {
   name?: string;
@@ -43,7 +55,7 @@ export interface Meta {
 export interface Cell {
   /** Value itself */
   value: any;
-  /** 
+  /**
    * Format callback which accepts value and should return react element
    * It could also be a string
    */
@@ -99,13 +111,11 @@ export interface UseSpreadsheetOptions {
   columnHeadingHeight?: number;
   /** Width of special column with row numbers. Default is 120 */
   rowHeadingWidth?: number;
-  /** 
+  /**
    * Width and height of groups special rows and columns.
    * These areas serve for group buttons rendering and group lines.
    */
   groupSize?: number;
-  fixRows?: number;
-  fixColumns?: number;
 }
 
 export interface UseSpreadsheetResult {
@@ -132,12 +142,12 @@ export interface UseSpreadsheetResult {
   containerStyle: CSSProperties;
 }
 
-export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult
+export declare function useSpreadsheet(options: UseSpreadsheetOptions): UseSpreadsheetResult;
 
 export interface SpreadsheetProps extends UseSpreadsheetOptions {
   width?: number | string;
   height: number | string;
-  
+
   /**
    * If set to 'true' then special 'no-grid' class will be appended to root.
    * If default style imported, then grid will be hidden.
