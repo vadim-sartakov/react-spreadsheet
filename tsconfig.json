@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "target": "ES5",
+    "lib": ["DOM", "ES6"],
+    "outDir": "lib",
+    "downlevelIteration": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"]
+}

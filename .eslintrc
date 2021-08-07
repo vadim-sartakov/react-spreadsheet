@@ -1,0 +1,29 @@
+{
+  "extends": ["plugin:@typescript-eslint/recommended", "airbnb-typescript", "airbnb/hooks"],
+  "plugins": ["jest"],
+  "env": {
+    "jest/globals": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "react/jsx-props-no-spreading": "off",
+    "no-console": "warn",
+    "react/prop-types": "off",
+    "no-plusplus": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "@typescript-eslint/lines-between-class-members": "off",
+    "react/no-array-index-key": "off",
+    "no-else-return": "off",
+    "react/require-default-props": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "object-curly-newline": "off",
+    "arrow-parens": ["error", "as-needed"]
+  }
+}
