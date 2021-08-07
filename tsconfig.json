@@ -10,7 +10,8 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "jsx": "react-jsx",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true
   },
   "include": ["src/**/*"]
 }

@@ -6,8 +6,8 @@ import {
   Dispatch,
   SetStateAction,
 } from 'react';
-import { getCellsSize } from '@vadim-sartakov/react-scroller/lib/utils';
-import { ScrollData } from '@vadim-sartakov/react-scroller';
+import { getCellsSize } from '@vadim-sartakov/react-scroller/utils';
+import { ScrollData } from '@vadim-sartakov/react-scroller/types';
 import { SpreadsheetPropsBase } from './types';
 
 const useSpreadsheet = <T>({
