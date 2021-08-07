@@ -1,4 +1,3 @@
-import React from 'react';
 import { GridScrollerCellRenderProps } from '@vadim-sartakov/react-scroller';
 import { Meta, Story } from '@storybook/react/types-6-0';
 import Spreadsheet, { SpreadsheetProps } from './Spreadsheet';

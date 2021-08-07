@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { HeadingType } from 'types';
+import { HeadingType } from '../types';
 import Resizer from './Resizer';
 
 describe('useResize', () => {

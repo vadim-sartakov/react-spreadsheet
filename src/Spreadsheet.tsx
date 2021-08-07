@@ -1,9 +1,11 @@
-import React, { CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
+import * as React from 'react';
 import {
   useScroller,
   GridScrollerContainer,
   renderCells,
   GridScrollerCellRenderProps,
+  useResizer,
 } from '@vadim-sartakov/react-scroller';
 import SpecialCells from './SpecialCells';
 import SpreadsheetView from './SpreadsheetView';
@@ -88,7 +90,19 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     onScroll,
     scrollAreaStyle,
     visibleAreaStyle,
+    rowsScroller,
+    columnsScroller,
   } = scrollerProps;
+
+  useResizer({
+    scrollerContainerRef: spreadsheetContainerRef,
+    rowsScroller,
+    columnsScroller,
+    width,
+    height,
+    onRowsScrollDataChange,
+    onColumnsScrollDataChange,
+  });
 
   const spreadsheetViewProps = {
     cells,

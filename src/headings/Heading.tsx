@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import * as React from 'react';
 import { GridScrollerCellRenderProps } from '@vadim-sartakov/react-scroller';
 import { HeadingType, HeadingMeta } from '../types';
 import Resizer from '../Resizer';

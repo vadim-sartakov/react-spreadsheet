@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { HeadingMeta } from 'types';
+import * as React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { GridScroller, ScrollData } from '@vadim-sartakov/react-scroller';
+import { HeadingMeta } from '../types';
 import Heading from './Heading';
 
 export interface ColumnsHeadingsProps {

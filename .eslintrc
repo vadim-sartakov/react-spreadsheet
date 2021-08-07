@@ -24,6 +24,8 @@
     "@typescript-eslint/no-explicit-any": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "object-curly-newline": "off",
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }

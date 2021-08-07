@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import * as React from 'react';
 import { ListScroller, ScrollData } from '@vadim-sartakov/react-scroller';
 import Heading from './Heading';
 import { HeadingMeta } from '../types';

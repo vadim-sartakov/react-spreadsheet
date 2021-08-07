@@ -1,4 +1,3 @@
-import React from 'react';
 import HeadingsIntersection from './headings/HeadingsIntersection';
 import ColumnsHeadings from './headings/ColumnsHeadings';
 import RowsHeadings from './headings/RowsHeadings';
