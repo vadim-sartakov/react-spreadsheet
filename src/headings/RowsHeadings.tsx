@@ -15,9 +15,11 @@ export interface RowsHeadingsProps {
   totalRows: number;
   rowsScrollData: ScrollData;
   scrolledLeft: boolean;
+  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
 }
 
 const RowsHeadings: React.VFC<RowsHeadingsProps> = ({
+  scrollerContainerRef,
   overscroll,
   hideRowsHeadings,
   rowHeadingWidth = 40,
@@ -31,6 +33,7 @@ const RowsHeadings: React.VFC<RowsHeadingsProps> = ({
 }) => (
   hideRowsHeadings ? null : (
     <ListScroller
+      resizerContainerRef={scrollerContainerRef}
       RowComponent={Heading}
       rowComponentProps={{
         type: 'row',

@@ -15,9 +15,11 @@ export interface ColumnsHeadingsProps {
   totalColumns: number;
   columnsScrollData: ScrollData;
   scrolledTop: boolean;
+  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
 }
 
 const ColumnsHeadings: React.VFC<ColumnsHeadingsProps> = ({
+  scrollerContainerRef,
   overscroll,
   hideColumnsHeadings,
   columnHeadingHeight = 20,
@@ -31,6 +33,7 @@ const ColumnsHeadings: React.VFC<ColumnsHeadingsProps> = ({
 }) => (
   hideColumnsHeadings ? null : (
     <GridScroller
+      resizerContainerRef={scrollerContainerRef}
       value={[columns]}
       CellComponent={Heading}
       cellComponentProps={{
@@ -43,13 +46,14 @@ const ColumnsHeadings: React.VFC<ColumnsHeadingsProps> = ({
       defaultRowHeight={columnHeadingHeight}
       totalRows={1}
       totalColumns={totalColumns}
-      rowComponentProps={{ className: 'row' }}
+      gridLayout
       height={columnHeadingHeight}
       columnsSizes={columnsSizes}
       scrollerContainerProps={{
         className: `columns-headings last-row${scrolledTop ? ' scrolled-row' : ''}`,
       }}
       overscroll={overscroll}
+      rowsScrollData={{ offset: 0, visibleIndexes: [0] }}
       columnsScrollData={columnsScrollData}
     />
   )

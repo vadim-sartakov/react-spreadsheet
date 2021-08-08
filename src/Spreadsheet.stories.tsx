@@ -16,8 +16,8 @@ const generateCells = (rowsCount: number, columnsCount: number): Cell<string>[][
   ))
 );
 
-const CellComponent = ({ value, style }: GridScrollerCellRenderProps<Cell<string>>) => (
-  <div className="cell value-cell" style={style}>{value && value.value}</div>
+const CellComponent = ({ value }: GridScrollerCellRenderProps<Cell<string>>) => (
+  <div className="cell value-cell">{value && value.value}</div>
 );
 
 export default {

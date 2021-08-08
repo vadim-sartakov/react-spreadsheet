@@ -30,7 +30,6 @@ export interface SpreadsheetProps<T> extends SpreadsheetPropsBase<T> {
 
 const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   const {
-    cells: inputCells,
     style,
     className,
     defaultRowHeight,
@@ -47,7 +46,6 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     fixRows = 0,
     fixColumns = 0,
     CellComponent,
-    ...restInputProps
   } = inputProps;
   const spreadsheetProps = useSpreadsheet(inputProps);
   const {
@@ -83,6 +81,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     columnsScrollData,
     onColumnsScrollDataChange,
     onScroll: handleScroll,
+    gridLayout: true,
   });
   const {
     visibleRowsIndexes,
@@ -105,6 +104,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   });
 
   const spreadsheetViewProps = {
+    scrollerContainerRef: spreadsheetContainerRef,
     cells,
     rows,
     columns,
@@ -119,9 +119,18 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     totalRows,
     totalColumns,
     overscroll,
-    rowComponentProps: { className: 'row' },
+    gridLayout: true,
     CellComponent,
   };
+
+  const fixedRowsScrollData = useMemo(
+    () => ({ offset: 0, visibleIndexes: [...Array(fixRows).keys()] }),
+    [fixRows],
+  );
+  const fixedColumnsScrollData = useMemo(
+    () => ({ offset: 0, visibleIndexes: [...Array(fixColumns).keys()] }),
+    [fixColumns],
+  );
 
   const fixedRowsColumnsIntersection = fixRows && fixColumns ? (
     <SpreadsheetView
@@ -133,6 +142,8 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       height={fixedRowsSize + specialRowsSize}
       width={fixedColumnsSize + specialColumnsSize}
       style={{ overflow: 'hidden' }}
+      rowsScrollData={fixedRowsScrollData}
+      columnsScrollData={fixedColumnsScrollData}
     />
   ) : null;
 
@@ -151,6 +162,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       // (by spec nearest parent container with non default
       // overflow property is picked for sticky element while scrolling)
       style={{ overflow: 'visible', marginLeft: -fixedColumnsSize }}
+      rowsScrollData={fixedRowsScrollData}
       columnsScrollData={columnsScrollData}
     />
   ) : null;
@@ -164,12 +176,14 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       totalColumns={fixColumns}
       className={`fixed-columns last-column${scrolledLeft ? ' scrolled-column' : ''}`}
       rowsScrollData={rowsScrollData}
+      columnsScrollData={fixedColumnsScrollData}
       style={{ marginTop: -fixedRowsSize }}
     />
   ) : null;
 
   const specialCellsElement = (
     <SpecialCells
+      scrollerContainerRef={spreadsheetContainerRef}
       rowsScrollData={rowsScrollData}
       columnsScrollData={columnsScrollData}
       rows={rows}
@@ -195,9 +209,13 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   const bodyElements = renderCells({
     visibleRowsIndexes,
     visibleColumnsIndexes,
-    rowComponentProps: { className: 'row' },
+    RowComponent: React.Fragment,
     CellComponent,
-    cellComponentProps: { InnerComponent: CellComponent },
+    value: cells,
+    defaultRowHeight,
+    defaultColumnWidth,
+    rowsSizes,
+    columnsSizes,
   });
 
   const valueContainerStyle = useMemo(() => ({
@@ -207,16 +225,10 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
 
   return (
     <GridScrollerContainer
-      {...restInputProps}
       containerRef={spreadsheetContainerRef}
       className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
       style={{ ...style, ...containerStyle, overflow: 'auto' }}
       onScroll={onScroll}
-      defaultRowHeight={defaultRowHeight}
-      defaultColumnWidth={defaultColumnWidth}
-      rowsSizes={rowsSizes}
-      columnsSizes={columnsSizes}
-      value={cells}
       width={width}
       height={height}
     >
@@ -232,7 +244,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       >
         {specialCellsElement}
         <div style={scrollAreaStyle}>
-          <div style={{ ...visibleAreaStyle }}>
+          <div style={visibleAreaStyle}>
             {bodyElements}
           </div>
         </div>

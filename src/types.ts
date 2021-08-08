@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import React, { Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { ScrollData } from '@vadim-sartakov/react-scroller';
 
 export enum HeadingType {
@@ -82,6 +82,7 @@ export interface Group {
 }
 
 export interface SpreadsheetViewProps {
+  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
   rowsScrollData?: ScrollData;
   columnsScrollData?: ScrollData;
   rows: HeadingMeta[];

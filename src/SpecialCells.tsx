@@ -4,6 +4,7 @@ import RowsHeadings from './headings/RowsHeadings';
 import { SpreadsheetViewProps } from './types';
 
 const SpecialCells = ({
+  scrollerContainerRef,
   rowsScrollData,
   columnsScrollData,
   rows,
@@ -35,6 +36,7 @@ const SpecialCells = ({
 
   const columnsHeadingsElement = (
     <ColumnsHeadings
+      scrollerContainerRef={scrollerContainerRef}
       columns={columns}
       columnHeadingHeight={columnHeadingHeight}
       totalColumns={totalColumns}
@@ -50,6 +52,7 @@ const SpecialCells = ({
 
   const rowsHeadingsElement = (
     <RowsHeadings
+      scrollerContainerRef={scrollerContainerRef}
       rows={rows}
       rowHeadingWidth={rowHeadingWidth}
       totalRows={totalRows}

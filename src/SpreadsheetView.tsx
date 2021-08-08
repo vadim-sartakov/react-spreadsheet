@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import * as React from 'react';
 import {
   useScroller,
@@ -23,9 +23,11 @@ export interface SpreadsheetViewProps<T> extends SpreadsheetViewPropsBase {
   RowComponent?: React.FC | string;
   rowComponentProps?: Record<string, unknown>;
   CellComponent: React.FC<GridScrollerCellRenderProps<Cell<T>>>;
+  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
 }
 
 const SpreadsheetView = <T extends unknown>({
+  scrollerContainerRef: scrollerContainerRefProp,
   style,
   className,
   cells,
@@ -51,13 +53,11 @@ const SpreadsheetView = <T extends unknown>({
   scrolledTop,
   scrolledLeft,
   CellComponent,
-  RowComponent,
-  rowComponentProps,
 }: SpreadsheetViewProps<T>) => {
-  const containerStyle = {
+  const containerStyle = useMemo(() => ({
     display: 'grid',
     gridTemplateColumns: `${hideRowsHeadings ? '' : `${rowHeadingWidth}px `}auto`,
-  };
+  }), [hideRowsHeadings, rowHeadingWidth]);
 
   const {
     visibleRowsIndexes,
@@ -71,6 +71,7 @@ const SpreadsheetView = <T extends unknown>({
     rowsScroller,
     columnsScroller,
   } = useScroller({
+    scrollerContainerRef: scrollerContainerRefProp,
     height,
     width,
     defaultRowHeight,
@@ -82,6 +83,7 @@ const SpreadsheetView = <T extends unknown>({
     overscroll,
     rowsScrollData,
     columnsScrollData,
+    gridLayout: true,
   });
 
   useResizer({
@@ -95,15 +97,20 @@ const SpreadsheetView = <T extends unknown>({
   });
 
   const elements = renderCells({
+    value: cells,
+    defaultRowHeight,
+    defaultColumnWidth,
+    rowsSizes,
+    columnsSizes,
     visibleRowsIndexes,
     visibleColumnsIndexes,
     CellComponent,
-    RowComponent,
-    rowComponentProps,
+    RowComponent: React.Fragment,
   });
 
   const specialCellsElement = (
     <SpecialCells
+      scrollerContainerRef={scrollerContainerRef}
       rowsScrollData={rowsScrollData}
       columnsScrollData={columnsScrollData}
       overscroll={overscroll}
@@ -130,14 +137,8 @@ const SpreadsheetView = <T extends unknown>({
 
   return (
     <GridScrollerContainer
-      containerRef={scrollerContainerRef}
       style={{ ...style, ...containerStyle }}
       className={className}
-      value={cells}
-      rowsSizes={rowsSizes}
-      columnsSizes={columnsSizes}
-      defaultRowHeight={defaultRowHeight}
-      defaultColumnWidth={defaultColumnWidth}
       onScroll={onScroll}
       width={width}
       height={height}
