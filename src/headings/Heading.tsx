@@ -18,7 +18,6 @@ const classesMap = {
 
 const Heading: React.VFC<HeadingProps> = ({
   value,
-  style,
   type,
   rowIndex,
   columnIndex,
@@ -34,7 +33,6 @@ const Heading: React.VFC<HeadingProps> = ({
   return (
     <div
       className={`heading-cell ${classesMap[type]}`}
-      style={style}
     >
       {value.index + 1}
       <Resizer

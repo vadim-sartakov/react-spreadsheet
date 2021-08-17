@@ -1,8 +1,7 @@
-import { CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo, MutableRefObject, Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
 import {
   useScroller,
-  useResizer,
   renderCells,
   GridScrollerContainer,
   GridScrollerCellRenderProps,
@@ -10,23 +9,33 @@ import {
 import SpecialCells from './SpecialCells';
 import MergedCells from './MergedCells';
 import {
-  SpreadsheetViewProps as SpreadsheetViewPropsBase,
+  SpreadsheetSizesProps,
+  SpreadsheetDataProps,
+  SpreadsheetScrollProps,
   Cell,
 } from './types';
 
-export interface SpreadsheetViewProps<T> extends SpreadsheetViewPropsBase {
+export interface FixedViewProps<T> extends
+  Pick<SpreadsheetScrollProps, 'rowsScrollData' | 'columnsScrollData' | 'overscroll'>,
+  SpreadsheetSizesProps,
+  Pick<SpreadsheetDataProps<T>, 'cells' | 'rows' | 'columns'> {
+  scrollerContainerRef: MutableRefObject<HTMLDivElement>,
   style?: CSSProperties;
   className?: string;
-  cells: Cell<T>[][];
   width?: string | number;
   height?: string | number;
-  RowComponent?: React.FC | string;
-  rowComponentProps?: Record<string, unknown>;
   CellComponent: React.FC<GridScrollerCellRenderProps<Cell<T>>>;
-  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
+  scrolledTop?: boolean;
+  scrolledLeft?: boolean;
+  rowsSizes?: number[];
+  onRowsSizesChange?: Dispatch<SetStateAction<number[]>>;
+  columnsSizes?: number[];
+  onColumnsSizesChange?: Dispatch<SetStateAction<number[]>>;
+  hideRowsHeadings?: boolean;
+  hideColumnsHeadings?: boolean;
 }
 
-const SpreadsheetView = <T extends unknown>({
+const FixedView = <T extends unknown>({
   scrollerContainerRef: scrollerContainerRefProp,
   style,
   className,
@@ -53,7 +62,7 @@ const SpreadsheetView = <T extends unknown>({
   scrolledTop,
   scrolledLeft,
   CellComponent,
-}: SpreadsheetViewProps<T>) => {
+}: FixedViewProps<T>) => {
   const containerStyle = useMemo(() => ({
     display: 'grid',
     gridTemplateColumns: `${hideRowsHeadings ? '' : `${rowHeadingWidth}px `}auto`,
@@ -66,10 +75,6 @@ const SpreadsheetView = <T extends unknown>({
     scrollAreaStyle,
     visibleAreaStyle,
     scrollerContainerRef,
-    onRowsScrollDataChange,
-    onColumnsScrollDataChange,
-    rowsScroller,
-    columnsScroller,
   } = useScroller({
     scrollerContainerRef: scrollerContainerRefProp,
     height,
@@ -84,16 +89,6 @@ const SpreadsheetView = <T extends unknown>({
     rowsScrollData,
     columnsScrollData,
     gridLayout: true,
-  });
-
-  useResizer({
-    scrollerContainerRef,
-    rowsScroller,
-    columnsScroller,
-    width,
-    height,
-    onRowsScrollDataChange,
-    onColumnsScrollDataChange,
   });
 
   const elements = renderCells({
@@ -154,4 +149,4 @@ const SpreadsheetView = <T extends unknown>({
   );
 };
 
-export default SpreadsheetView;
+export default FixedView;

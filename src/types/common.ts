@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction, MutableRefObject } from 'react';
 import { ScrollData } from '@vadim-sartakov/react-scroller';
+import { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { Style } from './styles';
 
 export enum HeadingType {
   Row = 'row',
@@ -14,35 +15,6 @@ export interface CellAddress {
 export interface CellsRange {
   start: CellAddress;
   end: CellAddress;
-}
-
-export interface Font {
-  name?: string;
-  size?: number;
-  bold: boolean;
-  italic: boolean;
-  color: string;
-}
-
-export interface BorderStyle {
-  style: 'thin' | 'medium' | 'thick' ;
-  color: string;
-}
-
-export interface Borders {
-  top?: BorderStyle;
-  left?: BorderStyle;
-  bottom?: BorderStyle;
-  right?: BorderStyle;
-}
-
-export interface Style {
-  verticalAlign: 'top' | 'middle' | 'bottom';
-  horizontalAlign: 'left' | 'center' | 'right';
-  font: Font;
-  border?: Borders;
-  fill?: string;
-  wrapText?: boolean;
 }
 
 export interface HeadingMeta {
@@ -81,31 +53,7 @@ export interface Group {
   collapsed?: boolean;
 }
 
-export interface SpreadsheetViewProps {
-  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
-  rowsScrollData?: ScrollData;
-  columnsScrollData?: ScrollData;
-  rows: HeadingMeta[];
-  columns: HeadingMeta[];
-  defaultRowHeight: number;
-  defaultColumnWidth: number;
-  totalRows: number;
-  totalColumns: number;
-  rowsSizes: number[];
-  onRowsSizesChange: Dispatch<SetStateAction<number[]>>;
-  columnsSizes: number[];
-  onColumnsSizesChange: Dispatch<SetStateAction<number[]>>;
-  rowHeadingWidth: number;
-  columnHeadingHeight: number;
-  hideRowsHeadings?: boolean;
-  hideColumnsHeadings?: boolean;
-  overscroll: number;
-  scrolledTop?: boolean;
-  scrolledLeft?: boolean;
-}
-
-export interface SpreadsheetPropsBase<T> {
-  ref?: MutableRefObject<HTMLDivElement>;
+export interface SpreadsheetDataProps<T> {
   defaultCells?: Cell<T>[][];
   cells?: Cell<T>[][];
   onCellsChange?: Dispatch<SetStateAction<Cell<T>[][]>>;
@@ -117,12 +65,21 @@ export interface SpreadsheetPropsBase<T> {
   defaultColumns?: HeadingMeta[];
   columns?: HeadingMeta[];
   onColumnsChange?: Dispatch<SetStateAction<HeadingMeta[]>>;
+}
+
+export interface SpreadsheetScrollProps {
+  overscroll?: number;
+  rowsScrollData?: ScrollData;
+  onRowsScrollDataChange?: (scrollData: ScrollData) => void;
+  columnsScrollData?: ScrollData;
+  onColumnsScrollDataChange?: (scrollData: ScrollData) => void;
+}
+
+export interface SpreadsheetSizesProps {
   totalRows: number;
   totalColumns: number;
   defaultRowHeight: number;
   defaultColumnWidth: number;
-  fixRows?: number;
-  fixColumns?: number;
   /** If set to 'true' then rows/columns headings won't be rendered */
   hideHeadings?: boolean;
   /** Height of special row with column numbers. Default is 20 */
@@ -134,4 +91,10 @@ export interface SpreadsheetPropsBase<T> {
    * These areas serve for group buttons rendering and group lines.
    */
   groupSize?: number;
+}
+
+export interface UseSpreadsheetProps<T> extends SpreadsheetDataProps<T>, SpreadsheetSizesProps {
+  spreadsheetContainerRef?: MutableRefObject<HTMLDivElement>;
+  fixRows?: number;
+  fixColumns?: number;
 }

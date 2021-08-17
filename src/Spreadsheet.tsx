@@ -8,23 +8,17 @@ import {
   useResizer,
 } from '@vadim-sartakov/react-scroller';
 import SpecialCells from './SpecialCells';
-import SpreadsheetView from './SpreadsheetView';
+import FixedView from './FixedView';
 import useSpreadsheet from './useSpreadsheet';
-import { SpreadsheetPropsBase, CellsRange, Cell } from './types';
+import { UseSpreadsheetProps, CellsRange, Cell } from './types';
 
-export interface SpreadsheetProps<T> extends SpreadsheetPropsBase<T> {
+export interface SpreadsheetProps<T> extends UseSpreadsheetProps<T> {
   style?: CSSProperties;
   className?: string;
   overscroll?: number;
   width?: number | string;
   height: number | string;
   CellComponent: React.FC<GridScrollerCellRenderProps<Cell<T>>>;
-
-  /**
-   * If set to 'true' then special 'no-grid' class will be appended to root.
-   * If default style imported, then grid will be hidden.
-   */
-  noGrid?: boolean;
   mergedCells?: CellsRange[];
 }
 
@@ -40,7 +34,6 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     totalColumns,
     overscroll,
     hideHeadings,
-    noGrid,
     width,
     height,
     fixRows = 0,
@@ -133,7 +126,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   );
 
   const fixedRowsColumnsIntersection = fixRows && fixColumns ? (
-    <SpreadsheetView
+    <FixedView
       {...spreadsheetViewProps}
       totalRows={fixRows}
       totalColumns={fixColumns}
@@ -148,7 +141,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   ) : null;
 
   const fixedRowsElement = fixRows ? (
-    <SpreadsheetView
+    <FixedView
       {...spreadsheetViewProps}
       hideRowsHeadings={Boolean(fixColumns)}
       scrolledLeft={scrolledLeft}
@@ -168,7 +161,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   ) : null;
 
   const fixedColumnsElement = fixColumns ? (
-    <SpreadsheetView
+    <FixedView
       {...spreadsheetViewProps}
       hideColumnsHeadings={Boolean(fixRows)}
       width={fixedColumnsSize + specialColumnsSize}
@@ -226,7 +219,7 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
   return (
     <GridScrollerContainer
       containerRef={spreadsheetContainerRef}
-      className={`spreadsheet${className ? ` ${className}` : ''}${noGrid ? ' no-grid' : ''}`}
+      className={`spreadsheet${className ? ` ${className}` : ''}`}
       style={{ ...style, ...containerStyle, overflow: 'auto' }}
       onScroll={onScroll}
       width={width}

@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
-import { ListScroller, ScrollData } from '@vadim-sartakov/react-scroller';
+import { ListScrollerContainer, renderRows, useScroller, ScrollData } from '@vadim-sartakov/react-scroller';
 import Heading from './Heading';
 import { HeadingMeta } from '../types';
 
 export interface RowsHeadingsProps {
+  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
   overscroll: number;
-  hideRowsHeadings: boolean;
   rowHeadingWidth?: number;
   rowsSizes: number[];
   onRowsSizesChange: Dispatch<SetStateAction<number[]>>;
@@ -15,13 +15,11 @@ export interface RowsHeadingsProps {
   totalRows: number;
   rowsScrollData: ScrollData;
   scrolledLeft: boolean;
-  scrollerContainerRef: React.MutableRefObject<HTMLDivElement>;
 }
 
 const RowsHeadings: React.VFC<RowsHeadingsProps> = ({
   scrollerContainerRef,
   overscroll,
-  hideRowsHeadings,
   rowHeadingWidth = 40,
   rowsSizes,
   onRowsSizesChange,
@@ -30,32 +28,51 @@ const RowsHeadings: React.VFC<RowsHeadingsProps> = ({
   totalRows,
   rowsScrollData,
   scrolledLeft,
-}) => (
-  hideRowsHeadings ? null : (
-    <ListScroller
-      resizerContainerRef={scrollerContainerRef}
-      RowComponent={Heading}
-      rowComponentProps={{
-        type: 'row',
-        defaultSize: defaultRowHeight,
-        sizes: rowsSizes,
-        onSizesChange: onRowsSizesChange,
-      }}
-      visibleAreaProps={{
-        style: { width: '100%' },
-      }}
-      value={rows}
+}) => {
+  const {
+    visibleRowsIndexes,
+    onScroll,
+    scrollAreaStyle,
+    visibleAreaStyle,
+  } = useScroller({
+    scrollerContainerRef,
+    defaultRowHeight,
+    defaultColumnWidth: rowHeadingWidth,
+    totalRows,
+    totalColumns: 1,
+    rowsSizes,
+    overscroll,
+    rowsScrollData,
+    gridLayout: true,
+  });
+
+  const elements = renderRows({
+    value: rows,
+    defaultRowHeight,
+    rowsSizes,
+    visibleRowsIndexes,
+    RowComponent: Heading,
+    rowComponentProps: {
+      type: 'row',
+      defaultSize: defaultRowHeight,
+      sizes: rowsSizes,
+      onSizesChange: onRowsSizesChange,
+    },
+  });
+
+  return (
+    <ListScrollerContainer
+      className={`rows-headings last-column${scrolledLeft ? ' scrolled-column' : ''}`}
+      onScroll={onScroll}
       width={rowHeadingWidth}
-      rowsSizes={rowsSizes}
-      scrollerContainerProps={{
-        className: `rows-headings last-column${scrolledLeft ? ' scrolled-column' : ''}`,
-      }}
-      overscroll={overscroll}
-      totalRows={totalRows}
-      defaultRowHeight={defaultRowHeight}
-      rowsScrollData={rowsScrollData}
-    />
-  )
-);
+    >
+      <div style={scrollAreaStyle}>
+        <div style={visibleAreaStyle}>
+          {elements}
+        </div>
+      </div>
+    </ListScrollerContainer>
+  );
+};
 
 export default RowsHeadings;

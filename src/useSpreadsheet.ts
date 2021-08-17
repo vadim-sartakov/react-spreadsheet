@@ -8,10 +8,10 @@ import {
 } from 'react';
 import { getCellsSize } from '@vadim-sartakov/react-scroller/utils';
 import { ScrollData } from '@vadim-sartakov/react-scroller/types';
-import { SpreadsheetPropsBase } from './types';
+import { UseSpreadsheetProps } from './types';
 
 const useSpreadsheet = <T>({
-  ref,
+  spreadsheetContainerRef: spreadsheetContainerRefProp,
   defaultCells,
   cells: cellsProp,
   onCellsChange: onCellsChangeProp,
@@ -30,12 +30,12 @@ const useSpreadsheet = <T>({
   rowHeadingWidth,
   fixRows,
   fixColumns,
-}: SpreadsheetPropsBase<T>) => {
+}: UseSpreadsheetProps<T>) => {
   const [rowsScrollData, onRowsScrollDataChange] = useState<ScrollData>();
   const [columnsScrollData, onColumnsScrollDataChange] = useState<ScrollData>();
 
   const spreadsheetContainerRefLocal = useRef<HTMLDivElement>();
-  const spreadsheetContainerRef = ref || spreadsheetContainerRefLocal;
+  const spreadsheetContainerRef = spreadsheetContainerRefProp || spreadsheetContainerRefLocal;
 
   const [cellsState, setCellsState] = useState(defaultCells || []);
   const cells = cellsProp || cellsState;
