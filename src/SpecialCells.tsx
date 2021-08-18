@@ -1,14 +1,12 @@
-import { MutableRefObject, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import HeadingsIntersection from './headings/HeadingsIntersection';
 import ColumnsHeadings from './headings/ColumnsHeadings';
 import RowsHeadings from './headings/RowsHeadings';
-import { SpreadsheetDataProps, SpreadsheetSizesProps, SpreadsheetScrollProps } from './types';
+import { SpreadsheetDataProps, SpreadsheetSizesProps } from './types';
 
 export interface SpecialCellsProps extends
   Omit<SpreadsheetSizesProps, 'groupSize' | 'hideHeadings'>,
-  Pick<SpreadsheetDataProps<any>, 'rows' | 'columns'>,
-  Omit<SpreadsheetScrollProps, 'onRowsScrollDataChange' | 'onColumnsScrollDataChange'> {
-  scrollerContainerRef: MutableRefObject<HTMLDivElement>;
+  Pick<SpreadsheetDataProps<any>, 'rows' | 'columns'> {
   scrolledTop?: boolean;
   scrolledLeft?: boolean;
   rowsSizes?: number[];
@@ -17,18 +15,17 @@ export interface SpecialCellsProps extends
   onColumnsSizesChange?: Dispatch<SetStateAction<number[]>>;
   hideRowsHeadings?: boolean;
   hideColumnsHeadings?: boolean;
+  visibleRowsIndexes: number[];
+  visibleColumnsIndexes: number[];
+  scrollAreaStyle: React.CSSProperties;
+  visibleAreaStyle: React.CSSProperties;
 }
 
 const SpecialCells = ({
-  scrollerContainerRef,
-  rowsScrollData,
-  columnsScrollData,
   rows,
   columns,
   defaultRowHeight,
   defaultColumnWidth,
-  totalRows,
-  totalColumns,
   rowsSizes,
   onRowsSizesChange,
   columnsSizes,
@@ -37,9 +34,12 @@ const SpecialCells = ({
   columnHeadingHeight,
   hideRowsHeadings,
   hideColumnsHeadings,
-  overscroll,
   scrolledTop,
   scrolledLeft,
+  visibleRowsIndexes,
+  visibleColumnsIndexes,
+  scrollAreaStyle,
+  visibleAreaStyle,
 }: SpecialCellsProps) => {
   const headingsIntersectionElement = !hideRowsHeadings && !hideColumnsHeadings && (
     <HeadingsIntersection
@@ -50,31 +50,29 @@ const SpecialCells = ({
 
   const columnsHeadingsElement = !hideColumnsHeadings && (
     <ColumnsHeadings
-      scrollerContainerRef={scrollerContainerRef}
       columns={columns}
       columnHeadingHeight={columnHeadingHeight}
-      totalColumns={totalColumns}
       columnsSizes={columnsSizes}
       onColumnsSizesChange={onColumnsSizesChange}
       defaultColumnWidth={defaultColumnWidth}
-      columnsScrollData={columnsScrollData}
-      overscroll={overscroll}
       scrolledTop={scrolledTop}
+      visibleColumnsIndexes={visibleColumnsIndexes}
+      scrollAreaStyle={scrollAreaStyle}
+      visibleAreaStyle={visibleAreaStyle}
     />
   );
 
   const rowsHeadingsElement = !hideRowsHeadings && (
     <RowsHeadings
-      scrollerContainerRef={scrollerContainerRef}
       rows={rows}
       rowHeadingWidth={rowHeadingWidth}
-      totalRows={totalRows}
       rowsSizes={rowsSizes}
       onRowsSizesChange={onRowsSizesChange}
       defaultRowHeight={defaultRowHeight}
-      rowsScrollData={rowsScrollData}
-      overscroll={overscroll}
       scrolledLeft={scrolledLeft}
+      visibleRowsIndexes={visibleRowsIndexes}
+      scrollAreaStyle={scrollAreaStyle}
+      visibleAreaStyle={visibleAreaStyle}
     />
   );
   return (

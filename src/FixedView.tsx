@@ -1,7 +1,6 @@
-import { CSSProperties, useMemo, MutableRefObject, Dispatch, SetStateAction } from 'react';
+import { CSSProperties, useMemo, Dispatch, SetStateAction } from 'react';
 import * as React from 'react';
 import {
-  useScroller,
   renderCells,
   GridScrollerContainer,
   GridScrollerCellRenderProps,
@@ -11,15 +10,12 @@ import MergedCells from './MergedCells';
 import {
   SpreadsheetSizesProps,
   SpreadsheetDataProps,
-  SpreadsheetScrollProps,
   Cell,
 } from './types';
 
 export interface FixedViewProps<T> extends
-  Pick<SpreadsheetScrollProps, 'rowsScrollData' | 'columnsScrollData' | 'overscroll'>,
   SpreadsheetSizesProps,
   Pick<SpreadsheetDataProps<T>, 'cells' | 'rows' | 'columns'> {
-  scrollerContainerRef: MutableRefObject<HTMLDivElement>,
   style?: CSSProperties;
   className?: string;
   width?: string | number;
@@ -33,10 +29,13 @@ export interface FixedViewProps<T> extends
   onColumnsSizesChange?: Dispatch<SetStateAction<number[]>>;
   hideRowsHeadings?: boolean;
   hideColumnsHeadings?: boolean;
+  visibleRowsIndexes: number[];
+  visibleColumnsIndexes: number[];
+  scrollAreaStyle: React.CSSProperties;
+  visibleAreaStyle: React.CSSProperties;
 }
 
 const FixedView = <T extends unknown>({
-  scrollerContainerRef: scrollerContainerRefProp,
   style,
   className,
   cells,
@@ -52,44 +51,22 @@ const FixedView = <T extends unknown>({
   rowHeadingWidth,
   totalRows,
   totalColumns,
-  rowsScrollData,
-  columnsScrollData,
   hideRowsHeadings,
   hideColumnsHeadings,
   width,
   height,
-  overscroll,
   scrolledTop,
   scrolledLeft,
   CellComponent,
+  visibleRowsIndexes,
+  visibleColumnsIndexes,
+  scrollAreaStyle,
+  visibleAreaStyle,
 }: FixedViewProps<T>) => {
   const containerStyle = useMemo(() => ({
     display: 'grid',
     gridTemplateColumns: `${hideRowsHeadings ? '' : `${rowHeadingWidth}px `}auto`,
   }), [hideRowsHeadings, rowHeadingWidth]);
-
-  const {
-    visibleRowsIndexes,
-    visibleColumnsIndexes,
-    onScroll,
-    scrollAreaStyle,
-    visibleAreaStyle,
-    scrollerContainerRef,
-  } = useScroller({
-    scrollerContainerRef: scrollerContainerRefProp,
-    height,
-    width,
-    defaultRowHeight,
-    defaultColumnWidth,
-    totalRows,
-    totalColumns,
-    rowsSizes,
-    columnsSizes,
-    overscroll,
-    rowsScrollData,
-    columnsScrollData,
-    gridLayout: true,
-  });
 
   const elements = renderCells({
     value: cells,
@@ -105,10 +82,6 @@ const FixedView = <T extends unknown>({
 
   const specialCellsElement = (
     <SpecialCells
-      scrollerContainerRef={scrollerContainerRef}
-      rowsScrollData={rowsScrollData}
-      columnsScrollData={columnsScrollData}
-      overscroll={overscroll}
       rows={rows}
       columns={columns}
       rowsSizes={rowsSizes}
@@ -125,6 +98,10 @@ const FixedView = <T extends unknown>({
       defaultColumnWidth={defaultColumnWidth}
       scrolledTop={scrolledTop}
       scrolledLeft={scrolledLeft}
+      visibleRowsIndexes={visibleRowsIndexes}
+      visibleColumnsIndexes={visibleColumnsIndexes}
+      scrollAreaStyle={scrollAreaStyle}
+      visibleAreaStyle={visibleAreaStyle}
     />
   );
 
@@ -134,13 +111,16 @@ const FixedView = <T extends unknown>({
     <GridScrollerContainer
       style={{ ...style, ...containerStyle }}
       className={className}
-      onScroll={onScroll}
       width={width}
       height={height}
     >
       {specialCellsElement}
-      <div style={scrollAreaStyle}>
-        <div style={visibleAreaStyle}>
+      <div
+        style={scrollAreaStyle}
+      >
+        <div
+          style={visibleAreaStyle}
+        >
           {elements}
         </div>
       </div>

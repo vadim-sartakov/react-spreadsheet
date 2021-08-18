@@ -116,13 +116,19 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     CellComponent,
   };
 
-  const fixedRowsScrollData = useMemo(
-    () => ({ offset: 0, visibleIndexes: [...Array(fixRows).keys()] }),
-    [fixRows],
+  const fixedRowsIndexes = useMemo(() => [...Array(fixRows).keys()], [fixRows]);
+  const fixedColumnsIndexes = useMemo(() => [...Array(fixColumns).keys()], [fixColumns]);
+  const fixedGridTemplateRows = useMemo(
+    () => fixedRowsIndexes
+      .map(index => `${rowsSizes[index] || defaultRowHeight}px`)
+      .join(' '),
+    [fixedRowsIndexes, rowsSizes, defaultRowHeight],
   );
-  const fixedColumnsScrollData = useMemo(
-    () => ({ offset: 0, visibleIndexes: [...Array(fixColumns).keys()] }),
-    [fixColumns],
+  const fixedGridTemplateColumns = useMemo(
+    () => fixedColumnsIndexes
+      .map(index => `${columnsSizes[index] || defaultColumnWidth}px`)
+      .join(' '),
+    [fixedColumnsIndexes, columnsSizes, defaultColumnWidth],
   );
 
   const fixedRowsColumnsIntersection = fixRows && fixColumns ? (
@@ -135,8 +141,20 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       height={fixedRowsSize + specialRowsSize}
       width={fixedColumnsSize + specialColumnsSize}
       style={{ overflow: 'hidden' }}
-      rowsScrollData={fixedRowsScrollData}
-      columnsScrollData={fixedColumnsScrollData}
+      visibleRowsIndexes={fixedRowsIndexes}
+      visibleColumnsIndexes={fixedColumnsIndexes}
+      scrollAreaStyle={{
+        ...scrollAreaStyle,
+        width: fixedColumnsSize,
+        height: fixedRowsSize,
+      }}
+      visibleAreaStyle={{
+        ...visibleAreaStyle,
+        gridTemplateRows: fixedGridTemplateRows,
+        gridTemplateColumns: fixedGridTemplateColumns,
+        top: 0,
+        left: 0,
+      }}
     />
   ) : null;
 
@@ -155,8 +173,17 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       // (by spec nearest parent container with non default
       // overflow property is picked for sticky element while scrolling)
       style={{ overflow: 'visible', marginLeft: -fixedColumnsSize }}
-      rowsScrollData={fixedRowsScrollData}
-      columnsScrollData={columnsScrollData}
+      visibleRowsIndexes={fixedRowsIndexes}
+      visibleColumnsIndexes={visibleColumnsIndexes}
+      scrollAreaStyle={{
+        ...scrollAreaStyle,
+        height: fixedRowsSize,
+      }}
+      visibleAreaStyle={{
+        ...visibleAreaStyle,
+        gridTemplateRows: fixedGridTemplateRows,
+        top: 0,
+      }}
     />
   ) : null;
 
@@ -168,17 +195,23 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       scrolledTop={scrolledTop}
       totalColumns={fixColumns}
       className={`fixed-columns last-column${scrolledLeft ? ' scrolled-column' : ''}`}
-      rowsScrollData={rowsScrollData}
-      columnsScrollData={fixedColumnsScrollData}
       style={{ marginTop: -fixedRowsSize }}
+      visibleRowsIndexes={visibleRowsIndexes}
+      visibleColumnsIndexes={fixedColumnsIndexes}
+      scrollAreaStyle={{
+        ...scrollAreaStyle,
+        width: fixedColumnsSize,
+      }}
+      visibleAreaStyle={{
+        ...visibleAreaStyle,
+        gridTemplateColumns: fixedGridTemplateColumns,
+        left: 0,
+      }}
     />
   ) : null;
 
   const specialCellsElement = (
     <SpecialCells
-      scrollerContainerRef={spreadsheetContainerRef}
-      rowsScrollData={rowsScrollData}
-      columnsScrollData={columnsScrollData}
       rows={rows}
       columns={columns}
       defaultRowHeight={defaultRowHeight}
@@ -193,9 +226,12 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
       columnHeadingHeight={columnHeadingHeight}
       hideRowsHeadings={Boolean(fixColumns) || hideHeadings}
       hideColumnsHeadings={Boolean(fixRows) || hideHeadings}
-      overscroll={overscroll}
       scrolledTop={scrolledTop}
       scrolledLeft={scrolledLeft}
+      visibleRowsIndexes={visibleRowsIndexes}
+      visibleColumnsIndexes={visibleColumnsIndexes}
+      scrollAreaStyle={scrollAreaStyle}
+      visibleAreaStyle={visibleAreaStyle}
     />
   );
 
