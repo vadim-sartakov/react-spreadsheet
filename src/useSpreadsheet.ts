@@ -7,18 +7,13 @@ import {
   SetStateAction,
 } from 'react';
 import { getCellsSize } from '@vadim-sartakov/react-scroller/utils';
-import { ScrollData } from '@vadim-sartakov/react-scroller/types';
 import { UseSpreadsheetProps } from './types';
 
 const useSpreadsheet = <T>({
-  spreadsheetContainerRef: spreadsheetContainerRefProp,
-  defaultCells,
   cells: cellsProp,
   onCellsChange: onCellsChangeProp,
-  defaultRows,
   rows: rowsProp,
   onRowsChange: onRowsChangeProp,
-  defaultColumns,
   columns: columnsProp,
   onColumnsChange: onColumnsChangeProp,
   defaultRowHeight,
@@ -31,17 +26,13 @@ const useSpreadsheet = <T>({
   fixRows,
   fixColumns,
 }: UseSpreadsheetProps<T>) => {
-  const [rowsScrollData, onRowsScrollDataChange] = useState<ScrollData>();
-  const [columnsScrollData, onColumnsScrollDataChange] = useState<ScrollData>();
+  const spreadsheetContainerRef = useRef<HTMLDivElement>();
 
-  const spreadsheetContainerRefLocal = useRef<HTMLDivElement>();
-  const spreadsheetContainerRef = spreadsheetContainerRefProp || spreadsheetContainerRefLocal;
-
-  const [cellsState, setCellsState] = useState(defaultCells || []);
+  const [cellsState, setCellsState] = useState([]);
   const cells = cellsProp || cellsState;
   const onCellsChange = onCellsChangeProp || setCellsState;
 
-  const [rowsState, setRowsState] = useState(defaultRows || []);
+  const [rowsState, setRowsState] = useState([]);
   let rows = rowsProp || rowsState;
   rows = useMemo(
     () => (
@@ -53,7 +44,7 @@ const useSpreadsheet = <T>({
   );
   const onRowsChange = onRowsChangeProp || setRowsState;
 
-  const [columnsState, setColumnsState] = useState(defaultColumns || []);
+  const [columnsState, setColumnsState] = useState([]);
   let columns = columnsProp || columnsState;
   columns = useMemo(
     () => [...new Array(totalColumns).keys()]
@@ -90,14 +81,6 @@ const useSpreadsheet = <T>({
       return nextColumns;
     });
   }, [onColumnsChange]);
-
-  const [scrolledTop, setScrolledTop] = useState(false);
-  const [scrolledLeft, setScrolledLeft] = useState(false);
-
-  const onScroll: React.UIEventHandler<HTMLDivElement> = useCallback(e => {
-    setScrolledTop((<HTMLDivElement>e.target).scrollTop > 0);
-    setScrolledLeft((<HTMLDivElement>e.target).scrollLeft > 0);
-  }, []);
 
   const specialRowsSize = useMemo(
     () => (hideHeadings ? 0 : columnHeadingHeight),
@@ -139,13 +122,15 @@ const useSpreadsheet = <T>({
     gridTemplateColumns: `${fixedColumnsSize ? `${fixedColumnsSize + specialColumnsSize}px ` : ''}auto`,
   }), [fixedColumnsSize, specialColumnsSize]);
 
+  const valueContainerStyle = useMemo(() => ({
+    display: 'grid',
+    gridTemplateColumns: `${fixColumns || hideHeadings ? '' : `${rowHeadingWidth}px `}auto`,
+    marginTop: -fixedRowsSize,
+    marginLeft: -fixedColumnsSize,
+  }), [fixColumns, hideHeadings, rowHeadingWidth, fixedRowsSize, fixedColumnsSize]);
+
   return {
     spreadsheetContainerRef,
-    rowsScrollData,
-    onRowsScrollDataChange,
-    columnsScrollData,
-    onColumnsScrollDataChange,
-    onScroll,
     cells,
     onCellsChange,
     rows,
@@ -158,11 +143,10 @@ const useSpreadsheet = <T>({
     onColumnsSizesChange,
     specialRowsSize,
     specialColumnsSize,
-    scrolledTop,
-    scrolledLeft,
     fixedRowsSize,
     fixedColumnsSize,
     containerStyle,
+    valueContainerStyle,
   };
 };
 

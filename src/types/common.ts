@@ -1,5 +1,4 @@
-import { ScrollData } from '@vadim-sartakov/react-scroller';
-import { Dispatch, SetStateAction, MutableRefObject } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Style } from './styles';
 
 export enum HeadingType {
@@ -54,25 +53,17 @@ export interface Group {
 }
 
 export interface SpreadsheetDataProps<T> {
-  defaultCells?: Cell<T>[][];
   cells?: Cell<T>[][];
   onCellsChange?: Dispatch<SetStateAction<Cell<T>[][]>>;
-  /** Default value for internal state management */
-  defaultRows?: HeadingMeta[];
   /** If managing supposed to be by the upper component, passing value as a prop */
   rows?: HeadingMeta[];
   onRowsChange?: Dispatch<SetStateAction<HeadingMeta[]>>;
-  defaultColumns?: HeadingMeta[];
   columns?: HeadingMeta[];
   onColumnsChange?: Dispatch<SetStateAction<HeadingMeta[]>>;
 }
 
 export interface SpreadsheetScrollProps {
   overscroll?: number;
-  rowsScrollData?: ScrollData;
-  onRowsScrollDataChange?: (scrollData: ScrollData) => void;
-  columnsScrollData?: ScrollData;
-  onColumnsScrollDataChange?: (scrollData: ScrollData) => void;
 }
 
 export interface SpreadsheetSizesProps {
@@ -94,7 +85,6 @@ export interface SpreadsheetSizesProps {
 }
 
 export interface UseSpreadsheetProps<T> extends SpreadsheetDataProps<T>, SpreadsheetSizesProps {
-  spreadsheetContainerRef?: MutableRefObject<HTMLDivElement>;
   fixRows?: number;
   fixColumns?: number;
 }

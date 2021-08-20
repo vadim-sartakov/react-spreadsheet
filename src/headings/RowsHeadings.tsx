@@ -44,7 +44,6 @@ const RowsHeadings: React.VFC<RowsHeadingsProps> = ({
   return (
     <ListScrollerContainer
       className={`rows-headings last-column${scrolledLeft ? ' scrolled-column' : ''}`}
-      width={rowHeadingWidth}
     >
       <div
         style={{

@@ -1,4 +1,4 @@
-import { CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo, useState, useCallback } from 'react';
 import * as React from 'react';
 import {
   useScroller,
@@ -16,64 +16,76 @@ export interface SpreadsheetProps<T> extends UseSpreadsheetProps<T> {
   style?: CSSProperties;
   className?: string;
   overscroll?: number;
-  width?: number | string;
-  height: number | string;
   CellComponent: React.FC<GridScrollerCellRenderProps<Cell<T>>>;
   mergedCells?: CellsRange[];
 }
 
-const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
-  const {
-    style,
-    className,
-    defaultRowHeight,
-    defaultColumnWidth,
-    rowHeadingWidth,
-    columnHeadingHeight,
-    totalRows,
-    totalColumns,
-    overscroll,
-    hideHeadings,
-    width,
-    height,
-    fixRows = 0,
-    fixColumns = 0,
-    CellComponent,
-  } = inputProps;
-  const spreadsheetProps = useSpreadsheet(inputProps);
+const Spreadsheet = <T extends unknown>({
+  style,
+  className,
+  cells: cellsProp,
+  onCellsChange: onCellsChangeProp,
+  rows: rowsProp,
+  onRowsChange: onRowsChangeProp,
+  columns: columnsProp,
+  onColumnsChange: onColumnsChangeProp,
+  defaultRowHeight,
+  defaultColumnWidth,
+  rowHeadingWidth,
+  columnHeadingHeight,
+  totalRows,
+  totalColumns,
+  overscroll,
+  hideHeadings,
+  fixRows = 0,
+  fixColumns = 0,
+  CellComponent,
+}: SpreadsheetProps<T>) => {
   const {
     spreadsheetContainerRef,
     cells,
     rows,
     columns,
     rowsSizes,
-    onRowsSizesChange,
     columnsSizes,
+    onRowsSizesChange,
     onColumnsSizesChange,
-    specialRowsSize,
-    specialColumnsSize,
-    rowsScrollData,
-    onRowsScrollDataChange,
-    columnsScrollData,
-    onColumnsScrollDataChange,
-    onScroll: handleScroll,
-    scrolledTop,
-    scrolledLeft,
     fixedRowsSize,
     fixedColumnsSize,
+    specialRowsSize,
+    specialColumnsSize,
     containerStyle,
-  } = spreadsheetProps;
+    valueContainerStyle,
+  } = useSpreadsheet({
+    cells: cellsProp,
+    onCellsChange: onCellsChangeProp,
+    rows: rowsProp,
+    onRowsChange: onRowsChangeProp,
+    columns: columnsProp,
+    onColumnsChange: onColumnsChangeProp,
+    defaultRowHeight,
+    defaultColumnWidth,
+    totalRows,
+    totalColumns,
+    hideHeadings,
+    columnHeadingHeight,
+    rowHeadingWidth,
+    fixRows,
+    fixColumns,
+  });
+
+  const [scrolledTop, setScrolledTop] = useState(false);
+  const [scrolledLeft, setScrolledLeft] = useState(false);
 
   const scrollerProps = useScroller({
-    ...inputProps,
     scrollerContainerRef: spreadsheetContainerRef,
+    defaultRowHeight,
+    defaultColumnWidth,
+    totalRows,
+    totalColumns,
     rowsSizes,
     columnsSizes,
-    rowsScrollData,
-    onRowsScrollDataChange,
-    columnsScrollData,
-    onColumnsScrollDataChange,
-    onScroll: handleScroll,
+    overscroll,
     gridLayout: true,
   });
   const {
@@ -84,17 +96,23 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     visibleAreaStyle,
     rowsScroller,
     columnsScroller,
+    onRowsScrollDataChange,
+    onColumnsScrollDataChange,
   } = scrollerProps;
 
   useResizer({
     scrollerContainerRef: spreadsheetContainerRef,
     rowsScroller,
     columnsScroller,
-    width,
-    height,
     onRowsScrollDataChange,
     onColumnsScrollDataChange,
   });
+
+  const handleScroll: React.UIEventHandler<HTMLDivElement> = useCallback(e => {
+    onScroll(e);
+    setScrolledTop((e.target as HTMLDivElement).scrollTop > 0);
+    setScrolledLeft((e.target as HTMLDivElement).scrollLeft > 0);
+  }, [onScroll]);
 
   const spreadsheetViewProps = {
     scrollerContainerRef: spreadsheetContainerRef,
@@ -247,29 +265,18 @@ const Spreadsheet = <T extends unknown>(inputProps: SpreadsheetProps<T>) => {
     columnsSizes,
   });
 
-  const valueContainerStyle = useMemo(() => ({
-    display: 'grid',
-    gridTemplateColumns: `${fixColumns || hideHeadings ? '' : `${rowHeadingWidth}px `}auto`,
-  }), [fixColumns, hideHeadings, rowHeadingWidth]);
-
   return (
     <GridScrollerContainer
       containerRef={spreadsheetContainerRef}
       className={`spreadsheet${className ? ` ${className}` : ''}`}
       style={{ ...style, ...containerStyle, overflow: 'auto' }}
-      onScroll={onScroll}
-      width={width}
-      height={height}
+      onScroll={handleScroll}
     >
       {fixedRowsColumnsIntersection}
       {fixedRowsElement}
       {fixedColumnsElement}
       <div
-        style={{
-          ...valueContainerStyle,
-          marginTop: -fixedRowsSize,
-          marginLeft: -fixedColumnsSize,
-        }}
+        style={valueContainerStyle}
       >
         {specialCellsElement}
         <div style={scrollAreaStyle}>

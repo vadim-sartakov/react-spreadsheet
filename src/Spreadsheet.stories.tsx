@@ -107,7 +107,9 @@ const SpreadsheetTemplate: Story<SpreadsheetProps<string>> = ({
       cells={cells}
       totalRows={totalRows}
       totalColumns={totalColumns}
-      height="100vh"
+      style={{
+        height: '100vh',
+      }}
       overscroll={overscroll}
       CellComponent={CellComponent}
       columnHeadingHeight={columnHeadingHeight}
